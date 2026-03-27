@@ -41,7 +41,10 @@ public class ProductoService {
             existingProducto.setDescripcion(producto.getDescripcion());
             existingProducto.setPrecio(producto.getPrecio());
             existingProducto.setStock(producto.getStock());
-            existingProducto.setCategoria(producto.getCategoria());
+            existingProducto.getCategorias().clear();
+            if (producto.getCategorias() != null) {
+                existingProducto.getCategorias().addAll(producto.getCategorias());
+            }
             return productoRepository.save(existingProducto);
         }
         return null;
