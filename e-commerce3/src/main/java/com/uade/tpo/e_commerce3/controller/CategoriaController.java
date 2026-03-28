@@ -1,0 +1,55 @@
+package com.uade.tpo.e_commerce3.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.uade.tpo.e_commerce3.model.Categoria;
+import com.uade.tpo.e_commerce3.service.CategoriaService;
+
+@RestController
+@RequestMapping("/api/categorias")
+public class CategoriaController {
+
+    @Autowired
+    private CategoriaService categoriaService;
+
+    @GetMapping
+    public List<Categoria> getAllCategorias() {
+        return categoriaService.getAllCategorias();
+    }
+
+    @GetMapping("/{id}")
+    public Categoria getCategoriaById(@PathVariable Long id) {
+        return categoriaService.getCategoriaById(id);
+    }
+
+    @GetMapping("/nombre/{nombre}")
+    public Categoria getCategoriaByNombre(@PathVariable String nombre) {
+        return categoriaService.getCategoriaByNombre(nombre);
+    }
+
+    @PostMapping
+    public Categoria saveCategoria(@RequestBody Categoria categoria) {
+        return categoriaService.saveCategoria(categoria);
+    }
+
+    @PutMapping("/{id}")
+    public Categoria updateCategoria(@PathVariable Long id, @RequestBody Categoria categoria) {
+        return categoriaService.updateCategoria(id, categoria);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCategoria(@PathVariable Long id) {
+        categoriaService.deleteCategoriaById(id);
+    }
+}
+
