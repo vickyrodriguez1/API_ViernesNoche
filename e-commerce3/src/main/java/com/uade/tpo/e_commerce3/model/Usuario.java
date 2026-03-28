@@ -32,6 +32,12 @@ public class Usuario {
     
     private String direccion;
     
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String jwt;
+
     @ManyToOne
     @JoinColumn(name = "rol_id")
     private Rol rol;

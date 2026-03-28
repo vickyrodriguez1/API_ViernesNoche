@@ -18,6 +18,6 @@ public class Categoria {
     private String nombre;
 
     
-    @ManyToMany(mappedBy = "categorias")
+    @ManyToMany(mappedBy = "categorias", fetch = FetchType.LAZY)
     private List<Producto> productos = new ArrayList<>();
 }

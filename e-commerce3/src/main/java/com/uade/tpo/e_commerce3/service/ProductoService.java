@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.e_commerce3.dto.ProductoRequest;
+import com.uade.tpo.e_commerce3.model.Categoria;
 import com.uade.tpo.e_commerce3.model.Producto;
+import com.uade.tpo.e_commerce3.repository.CategoriaRepository;
 import com.uade.tpo.e_commerce3.repository.ProductoRepository;
 
 import jakarta.transaction.Transactional;
@@ -16,6 +19,9 @@ public class ProductoService {
  
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
     
     public List<Producto> getAllProductos() {
         return productoRepository.findAll();
@@ -29,9 +35,19 @@ public class ProductoService {
         productoRepository.deleteById(id);
     }
 
-    public Producto saveProducto(Producto producto) {
-        return productoRepository.save(producto);
+    public Producto saveProducto(ProductoRequest request) {
+        Producto producto = new Producto();
+        producto.setNombre(request.getNombre());
+        producto.setDescripcion(request.getDescripcion());
+        producto.setPrecio(request.getPrecio());
+        producto.setStock(request.getStock());
 
+        if (request.getCategoriaIds() != null && !request.getCategoriaIds().isEmpty()) {
+            List<Categoria> categorias = categoriaRepository.findAllById(request.getCategoriaIds());
+            producto.setCategorias(categorias);
+        }
+
+        return productoRepository.save(producto);
     }
 
     public Producto updateProducto(Long id, Producto producto) {
