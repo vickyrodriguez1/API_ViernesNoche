@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import lombok.Data;
 
 @Data
@@ -29,4 +31,8 @@ public class Usuario {
     private String telefono;
     
     private String direccion;
+    
+    @ManyToOne
+    @JoinColumn(name = "rol_id")
+    private Rol rol;
 }
