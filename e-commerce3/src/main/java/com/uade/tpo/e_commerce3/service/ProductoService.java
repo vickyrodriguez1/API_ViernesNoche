@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.uade.tpo.e_commerce3.dto.ProductoRequest;
+import com.uade.tpo.e_commerce3.dto.ProductoRequestDTO;
 import com.uade.tpo.e_commerce3.model.Categoria;
 import com.uade.tpo.e_commerce3.model.Producto;
 import com.uade.tpo.e_commerce3.repository.CategoriaRepository;
@@ -35,7 +35,7 @@ public class ProductoService {
         productoRepository.deleteById(id);
     }
 
-    public Producto saveProducto(ProductoRequest request) {
+    public Producto saveProducto(ProductoRequestDTO request) {
         Producto producto = new Producto();
         producto.setNombre(request.getNombre());
         producto.setDescripcion(request.getDescripcion());

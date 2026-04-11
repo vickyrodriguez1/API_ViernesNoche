@@ -1,6 +1,5 @@
 package com.uade.tpo.e_commerce3.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
@@ -18,8 +17,6 @@ public class Categoria {
     @Column(nullable = false)    
     private String nombre;
 
-    
-    @JsonIgnore
     @ManyToMany(mappedBy = "categorias", fetch = FetchType.LAZY)
     private List<Producto> productos = new ArrayList<>();
 }

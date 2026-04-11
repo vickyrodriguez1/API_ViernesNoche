@@ -3,7 +3,7 @@ package com.uade.tpo.e_commerce3.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uade.tpo.e_commerce3.dto.ProductoRequest;
+import com.uade.tpo.e_commerce3.dto.ProductoRequestDTO;
 import com.uade.tpo.e_commerce3.model.Producto;
 import com.uade.tpo.e_commerce3.service.ProductoService;
 
@@ -53,7 +53,7 @@ public class ProductoController {
     // POST - crear nuevo producto
     // http://localhost:8080/api/productos
     @PostMapping
-    public Producto saveProducto(@RequestBody ProductoRequest request) {
+    public Producto saveProducto(@RequestBody ProductoRequestDTO request) {
         return productoService.saveProducto(request);
     }
     
