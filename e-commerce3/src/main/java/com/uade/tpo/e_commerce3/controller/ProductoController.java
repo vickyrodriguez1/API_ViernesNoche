@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-
+import jakarta.validation.Valid;
 
 
 
@@ -53,7 +53,7 @@ public class ProductoController {
     // POST - crear nuevo producto
     // http://localhost:8080/api/productos
     @PostMapping
-    public Producto saveProducto(@RequestBody ProductoRequestDTO request) {
+    public Producto saveProducto(@Valid @RequestBody ProductoRequestDTO request) {
         return productoService.saveProducto(request);
     }
     
