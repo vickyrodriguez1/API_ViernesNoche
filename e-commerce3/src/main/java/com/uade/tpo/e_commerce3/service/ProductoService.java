@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.e_commerce3.dto.ProductoRequestDTO;
+import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Categoria;
 import com.uade.tpo.e_commerce3.model.Producto;
 import com.uade.tpo.e_commerce3.repository.CategoriaRepository;
@@ -28,7 +29,8 @@ public class ProductoService {
     }
 
     public Producto getProductoById(Long id) {
-        return productoRepository.findById(id).orElse(null);
+        return productoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + id));
     }
 
     public void deleteProductoById(Long id) {
@@ -52,17 +54,14 @@ public class ProductoService {
 
     public Producto updateProducto(Long id, Producto producto) {
         Producto existingProducto = getProductoById(id);
-        if (existingProducto != null) {
-            existingProducto.setNombre(producto.getNombre());
-            existingProducto.setDescripcion(producto.getDescripcion());
-            existingProducto.setPrecio(producto.getPrecio());
-            existingProducto.setStock(producto.getStock());
-            existingProducto.getCategorias().clear();
-            if (producto.getCategorias() != null) {
-                existingProducto.getCategorias().addAll(producto.getCategorias());
-            }
-            return productoRepository.save(existingProducto);
+        existingProducto.setNombre(producto.getNombre());
+        existingProducto.setDescripcion(producto.getDescripcion());
+        existingProducto.setPrecio(producto.getPrecio());
+        existingProducto.setStock(producto.getStock());
+        existingProducto.getCategorias().clear();
+        if (producto.getCategorias() != null) {
+            existingProducto.getCategorias().addAll(producto.getCategorias());
         }
-        return null;
+        return productoRepository.save(existingProducto);
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Pedido;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.repository.PedidoRepository;
@@ -24,7 +25,8 @@ public class PedidoService {
     }
 
     public Pedido getPedidoById(Long id) {
-        return pedidoRepository.findById(id).orElse(null);
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado con id: " + id));
     }
 
     public List<Pedido> getPedidosByUsuario(Usuario usuario) {
@@ -47,15 +49,12 @@ public class PedidoService {
 
     public Pedido updatePedido(Long id, Pedido pedido) {
         Pedido existingPedido = getPedidoById(id);
-        if (existingPedido != null) {
-            existingPedido.setUsuario(pedido.getUsuario());
-            existingPedido.setProducto(pedido.getProducto());
-            existingPedido.setCantidad(pedido.getCantidad());
-            existingPedido.setPrecioTotal(pedido.getPrecioTotal());
-            existingPedido.setEstado(pedido.getEstado());
-            existingPedido.setFechaEntrega(pedido.getFechaEntrega());
-            return pedidoRepository.save(existingPedido);
-        }
-        return null;
+        existingPedido.setUsuario(pedido.getUsuario());
+        existingPedido.setProducto(pedido.getProducto());
+        existingPedido.setCantidad(pedido.getCantidad());
+        existingPedido.setPrecioTotal(pedido.getPrecioTotal());
+        existingPedido.setEstado(pedido.getEstado());
+        existingPedido.setFechaEntrega(pedido.getFechaEntrega());
+        return pedidoRepository.save(existingPedido);
     }
 }

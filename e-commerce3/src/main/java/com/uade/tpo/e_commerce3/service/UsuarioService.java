@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.repository.UsuarioRepository;
 
@@ -22,11 +23,16 @@ public class UsuarioService {
     }
 
     public Usuario getUsuarioById(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
     }
 
     public Usuario getUsuarioByEmail(String email) {
-        return usuarioRepository.findByEmail(email);
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (usuario == null) {
+            throw new ResourceNotFoundException("Usuario no encontrado con email: " + email);
+        }
+        return usuario;
     }
 
     public void deleteUsuarioById(Long id) {
@@ -39,14 +45,11 @@ public class UsuarioService {
 
     public Usuario updateUsuario(Long id, Usuario usuario) {
         Usuario existingUsuario = getUsuarioById(id);
-        if (existingUsuario != null) {
-            existingUsuario.setNombre(usuario.getNombre());
-            existingUsuario.setApellido(usuario.getApellido());
-            existingUsuario.setEmail(usuario.getEmail());
-            existingUsuario.setTelefono(usuario.getTelefono());
-            existingUsuario.setDireccion(usuario.getDireccion());
-            return usuarioRepository.save(existingUsuario);
-        }
-        return null;
+        existingUsuario.setNombre(usuario.getNombre());
+        existingUsuario.setApellido(usuario.getApellido());
+        existingUsuario.setEmail(usuario.getEmail());
+        existingUsuario.setTelefono(usuario.getTelefono());
+        existingUsuario.setDireccion(usuario.getDireccion());
+        return usuarioRepository.save(existingUsuario);
     }
 }
