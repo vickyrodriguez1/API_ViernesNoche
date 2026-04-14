@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.e_commerce3.dto.UsuarioRegistroDTO;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.service.UsuarioService;
 //import com.uade.tpo.e_commerce3.dto.UsuarioRegistroDTO;
@@ -46,12 +47,18 @@ public class UsuarioController {
         return usuarioService.getUsuarioByEmail(email);
     }
 
-    // POST - crear nuevo usuario
+   /* // POST - crear nuevo usuario
    // http://localhost:8080/api/usuarios
     @PostMapping
    public Usuario saveUsuario(@Valid @RequestBody Usuario usuario) {
        return usuarioService.saveUsuario(usuario);
-   }
+    }*/
+
+    @PostMapping
+    public Usuario saveUsuario(@Valid @RequestBody UsuarioRegistroDTO request) {
+    // Al igual que en Producto, le pasamos el DTO directamente al Service
+    return usuarioService.saveUsuario(request);
+}
 
  
 

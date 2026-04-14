@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.e_commerce3.dto.UsuarioRegistroDTO;
 import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
+import com.uade.tpo.e_commerce3.model.RolEnum;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.repository.UsuarioRepository;
 
@@ -39,9 +41,24 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public Usuario saveUsuario(Usuario usuario) {
+    /*public Usuario saveUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }*/
+
+    public Usuario saveUsuario(UsuarioRegistroDTO dto) {
+    Usuario usuario = new Usuario();
+    usuario.setNombre(dto.getNombre());
+    usuario.setApellido(dto.getApellido());
+    usuario.setEmail(dto.getEmail());
+    usuario.setPassword(dto.getPassword());
+
+    // Conversión de String a Enum
+    if (dto.getRol() != null) {
+        usuario.setRol(RolEnum.valueOf(dto.getRol().toUpperCase()));
     }
+
+    return usuarioRepository.save(usuario);
+}
 
     public Usuario updateUsuario(Long id, Usuario usuario) {
         Usuario existingUsuario = getUsuarioById(id);
