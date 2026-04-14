@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.service.UsuarioService;
+//import com.uade.tpo.e_commerce3.dto.UsuarioRegistroDTO;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -44,11 +47,13 @@ public class UsuarioController {
     }
 
     // POST - crear nuevo usuario
-    // http://localhost:8080/api/usuarios
+   // http://localhost:8080/api/usuarios
     @PostMapping
-    public Usuario saveUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.saveUsuario(usuario);
-    }
+   public Usuario saveUsuario(@Valid @RequestBody Usuario usuario) {
+       return usuarioService.saveUsuario(usuario);
+   }
+
+ 
 
     // PUT - actualizar usuario
     // http://localhost:8080/api/usuarios/1
