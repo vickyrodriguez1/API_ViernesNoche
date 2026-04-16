@@ -1,11 +1,14 @@
 package com.uade.tpo.e_commerce3.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.e_commerce3.dto.ProductoListDTO;
 import com.uade.tpo.e_commerce3.dto.ProductoRequestDTO;
+import com.uade.tpo.e_commerce3.dto.ProductoResponseDTO;
 import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Categoria;
 import com.uade.tpo.e_commerce3.model.Producto;
@@ -24,11 +27,36 @@ public class ProductoService {
     @Autowired
     private CategoriaRepository categoriaRepository;
     
-    public List<Producto> getAllProductos() {
-        return productoRepository.findAll();
+    public List<ProductoListDTO> getProductosFiltrados(String nombre, String orden) {
+
+        List<Producto> productos = productoRepository.findAll();
+
+        if (nombre != null && !nombre.isBlank()) {
+            productos = productos.stream()
+                    .filter(p -> p.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if ("desc".equalsIgnoreCase(orden)) {
+            productos = productos.stream()
+                    .sorted((a, b) -> Double.compare(b.getPrecio(), a.getPrecio()))
+                    .collect(Collectors.toList());
+        } else if ("asc".equalsIgnoreCase(orden)) {
+            productos = productos.stream()
+                    .sorted((a, b) -> Double.compare(a.getPrecio(), b.getPrecio()))
+                    .collect(Collectors.toList());
+        }
+
+        return productos.stream()
+                .map(ProductoListDTO::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Producto getProductoById(Long id) {
+    public ProductoResponseDTO getProductoById(Long id) {
+        return ProductoResponseDTO.toDto(findProductoOrThrow(id));
+    }
+
+    private Producto findProductoOrThrow(Long id) {
         return productoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + id));
     }
@@ -53,7 +81,7 @@ public class ProductoService {
     }
 
     public Producto updateProducto(Long id, Producto producto) {
-        Producto existingProducto = getProductoById(id);
+        Producto existingProducto = findProductoOrThrow(id);
         existingProducto.setNombre(producto.getNombre());
         existingProducto.setDescripcion(producto.getDescripcion());
         existingProducto.setPrecio(producto.getPrecio());
