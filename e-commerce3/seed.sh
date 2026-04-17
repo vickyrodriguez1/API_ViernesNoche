@@ -3,7 +3,7 @@
 BASE_URL="http://localhost:8080"
 
 # ─────────────────────────────────────────────
-# USUARIO ADMIN
+# USUARIOS
 # ─────────────────────────────────────────────
 echo "=== Registrando usuario admin ==="
 curl -s -X POST "$BASE_URL/api/auth/register" \
@@ -19,7 +19,21 @@ curl -s -X POST "$BASE_URL/api/auth/register" \
   }' | cat
 
 echo ""
-echo "=== Login ==="
+echo "=== Registrando usuario cliente ==="
+curl -s -X POST "$BASE_URL/api/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Juan",
+    "apellido": "Perez",
+    "email": "juan@example.com",
+    "telefono": "1234567890",
+    "direccion": "Calle Falsa 123, CABA",
+    "rol": "CLIENTE",
+    "password": "cliente123"
+  }' | cat
+
+echo ""
+echo "=== Login admin ==="
 TOKEN=$(curl -s -X POST "$BASE_URL/api/auth/login" \
   -H "Content-Type: application/json" \
   -d '{"email": "admin@ecommerce.com", "password": "admin123"}' \
