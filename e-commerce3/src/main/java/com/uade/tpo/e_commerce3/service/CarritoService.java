@@ -36,9 +36,9 @@ public class CarritoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Obtener o crear carrito activo del usuario
-    public Carrito obtenerCarritoActivo(Long usuarioId) {
-        Optional<Carrito> carrito = carritoRepository.findByUsuarioIdAndEstado(usuarioId, "activo");
+    // Obtener o crear carrito del usuario
+    public Carrito obtenerCarritoDelUsuario(Long usuarioId) {
+        Optional<Carrito> carrito = carritoRepository.findByUsuarioId(usuarioId);
         if (carrito.isPresent()) {
             return carrito.get();
         }
@@ -51,11 +51,15 @@ public class CarritoService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + usuarioId));
 
+        // Verificar si ya tiene un carrito
+        if (usuario.getCarrito() != null) {
+            throw new ArgumentInvalidException("El usuario ya tiene un carrito asociado");
+        }
+
         Carrito carrito = new Carrito();
         carrito.setUsuario(usuario);
         carrito.setFechaCreacion(LocalDateTime.now());
         carrito.setFechaActualizacion(LocalDateTime.now());
-        carrito.setEstado("activo");
 
         return carritoRepository.save(carrito);
     }
@@ -66,9 +70,10 @@ public class CarritoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado con id: " + id));
     }
 
-    // Obtener todos los carritos del usuario
-    public List<Carrito> getCarritosPorUsuario(Long usuarioId) {
-        return carritoRepository.findByUsuarioId(usuarioId);
+    // Obtener carrito del usuario
+    public Carrito getCarritoPorUsuario(Long usuarioId) {
+        return carritoRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException("El usuario no tiene un carrito asociado"));
     }
 
     // Agregar producto al carrito
@@ -162,11 +167,10 @@ public class CarritoService {
                 .sum();
     }
 
-    // Completar carrito (cambiar estado)
+    // Completar carrito (cambiar estado a completado y crear nuevo carrito)
     public Carrito completarCarrito(Long carritoId) {
         Carrito carrito = getCarritoById(carritoId);
-
-        carrito.setEstado("completado");
+        
         carrito.setFechaActualizacion(LocalDateTime.now());
         return carritoRepository.save(carrito);
     }

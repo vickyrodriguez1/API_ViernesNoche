@@ -1,7 +1,5 @@
 package com.uade.tpo.e_commerce3.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +23,11 @@ public class CarritoController {
     @Autowired
     private CarritoService carritoService;
 
-    // GET - obtener carrito activo del usuario
+    // GET - obtener carrito del usuario
     // http://localhost:8080/api/carritos/usuario/1
     @GetMapping("/usuario/{usuarioId}")
-    public Carrito obtenerCarritoActivo(@PathVariable Long usuarioId) {
-        return carritoService.obtenerCarritoActivo(usuarioId);
+    public Carrito obtenerCarritoDelUsuario(@PathVariable Long usuarioId) {
+        return carritoService.obtenerCarritoDelUsuario(usuarioId);
     }
 
     // GET - obtener carrito por id
@@ -39,11 +37,11 @@ public class CarritoController {
         return carritoService.getCarritoById(id);
     }
 
-    // GET - obtener todos los carritos del usuario
-    // http://localhost:8080/api/carritos/usuario/1/todos
-    @GetMapping("/usuario/{usuarioId}/todos")
-    public List<Carrito> getCarritosPorUsuario(@PathVariable Long usuarioId) {
-        return carritoService.getCarritosPorUsuario(usuarioId);
+    // GET - obtener carrito del usuario (alternativa)
+    // http://localhost:8080/api/carritos/user/1
+    @GetMapping("/user/{usuarioId}")
+    public Carrito getCarritoPorUsuario(@PathVariable Long usuarioId) {
+        return carritoService.getCarritoPorUsuario(usuarioId);
     }
 
     // POST - crear nuevo carrito
