@@ -1,8 +1,10 @@
 package com.uade.tpo.e_commerce3.config;
 
+import com.uade.tpo.e_commerce3.model.RolEnum;
 import com.uade.tpo.e_commerce3.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -31,6 +33,9 @@ public class SecurityConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/productos", "/api/productos/**").hasRole(RolEnum.ADMIN.name())
+                    .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole(RolEnum.ADMIN.name())
+                    .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole(RolEnum.ADMIN.name())
                     .anyRequest().authenticated()
             )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
