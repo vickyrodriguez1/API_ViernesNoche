@@ -48,7 +48,7 @@ public class UsuarioController {
 
     // PUT - actualizar usuario
     // http://localhost:8080/api/usuarios/1
-    @PutMapping("/updateUsuario/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioUpdateDTO request) {
         return ResponseEntity.ok(usuarioService.updateUsuario(id, request));
     }
