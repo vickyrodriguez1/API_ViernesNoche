@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.e_commerce3.dto.UsuarioRegistroDTO;
+import com.uade.tpo.e_commerce3.dto.UsuarioUpdateDTO;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.service.UsuarioService;
 //import com.uade.tpo.e_commerce3.dto.UsuarioRegistroDTO;
@@ -64,9 +65,9 @@ public class UsuarioController {
 
     // PUT - actualizar usuario
     // http://localhost:8080/api/usuarios/1
-    @PutMapping("/{id}")
-    public Usuario updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return usuarioService.updateUsuario(id, usuario);
+    @PutMapping("/updateUsuario/{id}")
+    public Usuario updateUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioUpdateDTO request) {
+        return usuarioService.updateUsuario(id, request);
     }
 
     // DELETE - eliminar usuario
