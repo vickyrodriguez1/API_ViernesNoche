@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,20 +45,10 @@ public class PedidoController {
     @GetMapping("/usuario/{usuarioId}")
     public List<Pedido> getPedidosByUsuario(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioService.getUsuarioById(usuarioId);
-        if (usuario != null) {
-            return pedidoService.getPedidosByUsuario(usuario);
-        }
-        return null;
+        return pedidoService.getPedidosByUsuario(usuario);
     }
 
-    // POST - crear nuevo pedido
-    // http://localhost:8080/api/pedidos
-    @PostMapping
-    public Pedido savePedido(@RequestBody Pedido pedido) {
-        return pedidoService.savePedido(pedido);
-    }
-
-    // PUT - actualizar pedido
+    // PUT - actualizar estado o fecha de entrega del pedido
     // http://localhost:8080/api/pedidos/1
     @PutMapping("/{id}")
     public Pedido updatePedido(@PathVariable Long id, @RequestBody Pedido pedido) {

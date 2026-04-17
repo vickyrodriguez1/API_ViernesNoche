@@ -16,10 +16,10 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class PedidoService {
-    
+
     @Autowired
     private PedidoRepository pedidoRepository;
-    
+
     public List<Pedido> getAllPedidos() {
         return pedidoRepository.findAll();
     }
@@ -50,8 +50,7 @@ public class PedidoService {
     public Pedido updatePedido(Long id, Pedido pedido) {
         Pedido existingPedido = getPedidoById(id);
         existingPedido.setUsuario(pedido.getUsuario());
-        existingPedido.setProducto(pedido.getProducto());
-        existingPedido.setCantidad(pedido.getCantidad());
+        existingPedido.setProductos(pedido.getProductos());
         existingPedido.setPrecioTotal(pedido.getPrecioTotal());
         existingPedido.setEstado(pedido.getEstado());
         existingPedido.setFechaEntrega(pedido.getFechaEntrega());

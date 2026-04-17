@@ -5,15 +5,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uade.tpo.e_commerce3.dto.ActualizarCantidadRequest;
 import com.uade.tpo.e_commerce3.dto.AgregarProductoRequest;
 import com.uade.tpo.e_commerce3.dto.CarritoRequest;
 import com.uade.tpo.e_commerce3.model.Carrito;
+import com.uade.tpo.e_commerce3.model.Pedido;
 import com.uade.tpo.e_commerce3.service.CarritoService;
 
 @RestController
@@ -23,7 +22,7 @@ public class CarritoController {
     @Autowired
     private CarritoService carritoService;
 
-    // GET - obtener carrito del usuario
+    // GET - obtener carrito del usuario (crea uno si no existe)
     // http://localhost:8080/api/carritos/usuario/1
     @GetMapping("/usuario/{usuarioId}")
     public Carrito obtenerCarritoDelUsuario(@PathVariable Long usuarioId) {
@@ -37,7 +36,7 @@ public class CarritoController {
         return carritoService.getCarritoById(id);
     }
 
-    // GET - obtener carrito del usuario (alternativa)
+    // GET - obtener carrito del usuario por usuarioId
     // http://localhost:8080/api/carritos/user/1
     @GetMapping("/user/{usuarioId}")
     public Carrito getCarritoPorUsuario(@PathVariable Long usuarioId) {
@@ -55,22 +54,14 @@ public class CarritoController {
     // http://localhost:8080/api/carritos/1/productos
     @PostMapping("/{carritoId}/productos")
     public Carrito agregarProducto(@PathVariable Long carritoId, @RequestBody AgregarProductoRequest request) {
-        return carritoService.agregarProducto(carritoId, request.getProductoId(), request.getCantidad());
-    }
-
-    // PUT - actualizar cantidad de producto en el carrito
-    // http://localhost:8080/api/carritos/1/items/1
-    @PutMapping("/{carritoId}/items/{itemId}")
-    public Carrito actualizarCantidad(@PathVariable Long carritoId, @PathVariable Long itemId,
-            @RequestBody ActualizarCantidadRequest request) {
-        return carritoService.actualizarCantidad(carritoId, itemId, request.getCantidad());
+        return carritoService.agregarProducto(carritoId, request.getProductoId());
     }
 
     // DELETE - eliminar producto del carrito
-    // http://localhost:8080/api/carritos/1/items/1
-    @DeleteMapping("/{carritoId}/items/{itemId}")
-    public Carrito eliminarProducto(@PathVariable Long carritoId, @PathVariable Long itemId) {
-        return carritoService.eliminarProducto(carritoId, itemId);
+    // http://localhost:8080/api/carritos/1/productos/2
+    @DeleteMapping("/{carritoId}/productos/{productoId}")
+    public Carrito eliminarProducto(@PathVariable Long carritoId, @PathVariable Long productoId) {
+        return carritoService.eliminarProducto(carritoId, productoId);
     }
 
     // DELETE - vaciar carrito
@@ -87,11 +78,11 @@ public class CarritoController {
         return carritoService.calcularTotal(carritoId);
     }
 
-    // PUT - completar carrito
-    // http://localhost:8080/api/carritos/1/completar
-    @PutMapping("/{carritoId}/completar")
-    public Carrito completarCarrito(@PathVariable Long carritoId) {
-        return carritoService.completarCarrito(carritoId);
+    // POST - pagar carrito: crea el pedido y limpia productos_carrito
+    // http://localhost:8080/api/carritos/1/pagar
+    @PostMapping("/{carritoId}/pagar")
+    public Pedido pagar(@PathVariable Long carritoId) {
+        return carritoService.pagar(carritoId);
     }
 
     // DELETE - eliminar carrito
