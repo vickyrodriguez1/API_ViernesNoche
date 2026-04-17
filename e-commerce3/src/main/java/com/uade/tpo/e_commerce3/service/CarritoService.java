@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.e_commerce3.dto.CarritoResponseDTO;
+import com.uade.tpo.e_commerce3.dto.PedidoResponseDTO;
 import com.uade.tpo.e_commerce3.exception.ArgumentInvalidException;
 import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Carrito;
@@ -17,6 +19,8 @@ import com.uade.tpo.e_commerce3.repository.CarritoRepository;
 import com.uade.tpo.e_commerce3.repository.PedidoRepository;
 import com.uade.tpo.e_commerce3.repository.ProductoRepository;
 import com.uade.tpo.e_commerce3.repository.UsuarioRepository;
+import com.uade.tpo.e_commerce3.service.mapper.CarritoMapper;
+import com.uade.tpo.e_commerce3.service.mapper.PedidoMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -36,15 +40,21 @@ public class CarritoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public Carrito obtenerCarritoDelUsuario(Long usuarioId) {
+    @Autowired
+    private CarritoMapper carritoMapper;
+
+    @Autowired
+    private PedidoMapper pedidoMapper;
+
+    public CarritoResponseDTO obtenerCarritoDelUsuario(Long usuarioId) {
         Optional<Carrito> carrito = carritoRepository.findByUsuarioId(usuarioId);
         if (carrito.isPresent()) {
-            return carrito.get();
+            return carritoMapper.toDto(carrito.get());
         }
         return crearCarrito(usuarioId);
     }
 
-    public Carrito crearCarrito(Long usuarioId) {
+    public CarritoResponseDTO crearCarrito(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + usuarioId));
 
@@ -57,19 +67,20 @@ public class CarritoService {
         carrito.setFechaCreacion(LocalDateTime.now());
         carrito.setFechaActualizacion(LocalDateTime.now());
 
-        return carritoRepository.save(carrito);
+        return carritoMapper.toDto(carritoRepository.save(carrito));
     }
 
-    public Carrito getCarritoById(Long id) {
-        return getCarritoEntityById(id);
+    public CarritoResponseDTO getCarritoById(Long id) {
+        return carritoMapper.toDto(getCarritoEntityById(id));
     }
 
-    public Carrito getCarritoPorUsuario(Long usuarioId) {
-        return carritoRepository.findByUsuarioId(usuarioId)
+    public CarritoResponseDTO getCarritoPorUsuario(Long usuarioId) {
+        Carrito carrito = carritoRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("El usuario no tiene un carrito asociado"));
+        return carritoMapper.toDto(carrito);
     }
 
-    public Carrito agregarProducto(Long carritoId, Long productoId) {
+    public CarritoResponseDTO agregarProducto(Long carritoId, Long productoId) {
         Carrito carrito = getCarritoEntityById(carritoId);
 
         Producto producto = productoRepository.findById(productoId)
@@ -84,10 +95,10 @@ public class CarritoService {
 
         carrito.getProductos().add(producto);
         carrito.setFechaActualizacion(LocalDateTime.now());
-        return carritoRepository.save(carrito);
+        return carritoMapper.toDto(carritoRepository.save(carrito));
     }
 
-    public Carrito eliminarProducto(Long carritoId, Long productoId) {
+    public CarritoResponseDTO eliminarProducto(Long carritoId, Long productoId) {
         Carrito carrito = getCarritoEntityById(carritoId);
 
         boolean removed = carrito.getProductos().removeIf(p -> p.getId().equals(productoId));
@@ -97,14 +108,14 @@ public class CarritoService {
         }
 
         carrito.setFechaActualizacion(LocalDateTime.now());
-        return carritoRepository.save(carrito);
+        return carritoMapper.toDto(carritoRepository.save(carrito));
     }
 
-    public Carrito vaciarCarrito(Long carritoId) {
+    public CarritoResponseDTO vaciarCarrito(Long carritoId) {
         Carrito carrito = getCarritoEntityById(carritoId);
         carrito.getProductos().clear();
         carrito.setFechaActualizacion(LocalDateTime.now());
-        return carritoRepository.save(carrito);
+        return carritoMapper.toDto(carritoRepository.save(carrito));
     }
 
     public Double calcularTotal(Long carritoId) {
@@ -114,7 +125,7 @@ public class CarritoService {
                 .sum();
     }
 
-    public Pedido pagar(Long carritoId) {
+    public PedidoResponseDTO pagar(Long carritoId) {
         Carrito carrito = getCarritoEntityById(carritoId);
 
         if (carrito.getProductos().isEmpty()) {
@@ -134,7 +145,7 @@ public class CarritoService {
         carrito.setFechaActualizacion(LocalDateTime.now());
         carritoRepository.save(carrito);
 
-        return pedido;
+        return pedidoMapper.toDto(pedido);
     }
 
     public void deleteCarrito(Long carritoId) {

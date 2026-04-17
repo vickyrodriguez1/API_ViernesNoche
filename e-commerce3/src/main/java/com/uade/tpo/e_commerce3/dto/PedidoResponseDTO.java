@@ -1,6 +1,7 @@
 package com.uade.tpo.e_commerce3.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,9 +13,7 @@ import lombok.NoArgsConstructor;
 public class PedidoResponseDTO {
     private Long id;
     private Long usuarioId;
-    private Long productoId;
-    private String productoNombre;
-    private Integer cantidad;
+    private List<ProductoListDTO> productos;
     private Double precioTotal;
     private LocalDateTime fechaPedido;
     private LocalDateTime fechaEntrega;

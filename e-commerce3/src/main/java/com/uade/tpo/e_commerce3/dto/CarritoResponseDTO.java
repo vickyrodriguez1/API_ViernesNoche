@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarritoResponseDTO {
     private Long id;
+    private Long usuarioId;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
-    private List<ItemCarritoResponseDTO> items;
+    private List<ProductoListDTO> productos;
     private Double total;
 }

@@ -1,16 +1,19 @@
 package com.uade.tpo.e_commerce3.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.e_commerce3.dto.PedidoResponseDTO;
+import com.uade.tpo.e_commerce3.dto.PedidoUpdateDTO;
 import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Pedido;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.repository.PedidoRepository;
 import com.uade.tpo.e_commerce3.repository.UsuarioRepository;
+import com.uade.tpo.e_commerce3.service.mapper.PedidoMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -24,42 +27,40 @@ public class PedidoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Pedido> getAllPedidos() {
-        return pedidoRepository.findAll();
+    @Autowired
+    private PedidoMapper pedidoMapper;
+
+    public List<PedidoResponseDTO> getAllPedidos() {
+        return pedidoRepository.findAll().stream()
+                .map(pedidoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Pedido getPedidoById(Long id) {
-        return getPedidoEntityById(id);
+    public PedidoResponseDTO getPedidoById(Long id) {
+        return pedidoMapper.toDto(getPedidoEntityById(id));
     }
 
-    public List<Pedido> getPedidosByUsuario(Long usuarioId) {
+    public List<PedidoResponseDTO> getPedidosByUsuario(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + usuarioId));
-        return pedidoRepository.findByUsuario(usuario);
+        return pedidoRepository.findByUsuario(usuario).stream()
+                .map(pedidoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public void deletePedidoById(Long id) {
         pedidoRepository.deleteById(id);
     }
 
-    public Pedido savePedido(Pedido pedido) {
-        if (pedido.getFechaPedido() == null) {
-            pedido.setFechaPedido(LocalDateTime.now());
+    public PedidoResponseDTO updatePedido(Long id, PedidoUpdateDTO dto) {
+        Pedido pedido = getPedidoEntityById(id);
+        if (dto.getEstado() != null) {
+            pedido.setEstado(dto.getEstado());
         }
-        if (pedido.getEstado() == null) {
-            pedido.setEstado("pendiente");
+        if (dto.getFechaEntrega() != null) {
+            pedido.setFechaEntrega(dto.getFechaEntrega());
         }
-        return pedidoRepository.save(pedido);
-    }
-
-    public Pedido updatePedido(Long id, Pedido pedido) {
-        Pedido existingPedido = getPedidoEntityById(id);
-        existingPedido.setUsuario(pedido.getUsuario());
-        existingPedido.setProductos(pedido.getProductos());
-        existingPedido.setPrecioTotal(pedido.getPrecioTotal());
-        existingPedido.setEstado(pedido.getEstado());
-        existingPedido.setFechaEntrega(pedido.getFechaEntrega());
-        return pedidoRepository.save(existingPedido);
+        return pedidoMapper.toDto(pedidoRepository.save(pedido));
     }
 
     private Pedido getPedidoEntityById(Long id) {

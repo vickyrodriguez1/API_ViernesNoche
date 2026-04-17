@@ -1,0 +1,603 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "E-Commerce API",
+    "description": "IMPORTANTE: ejecutar 'Login Admin' primero para que el token se guarde automaticamente en {{auth_token}}. Todos los requests heredan el Bearer token de la coleccion.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string",
+      "description": "Se llena automaticamente al ejecutar Login Admin o Login Cliente"
+    },
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registrar Admin (seed)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Admin\",\n  \"apellido\": \"Sistema\",\n  \"email\": \"admin@ecommerce.com\",\n  \"telefono\": \"1122334455\",\n  \"direccion\": \"Av. Corrientes 1234, CABA\",\n  \"rol\": \"ADMIN\",\n  \"password\": \"admin123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar Cliente",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Perez\",\n  \"email\": \"juan@example.com\",\n  \"telefono\": \"1234567890\",\n  \"direccion\": \"Calle Falsa 123, CABA\",\n  \"rol\": \"CLIENTE\",\n  \"password\": \"cliente123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('auth_token', json.token);",
+                  "  console.log('Token guardado OK');",
+                  "} else {",
+                  "  console.error('ERROR: no hay token en la respuesta ->', JSON.stringify(json));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@ecommerce.com\",\n  \"password\": \"admin123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('auth_token', json.token);",
+                  "  console.log('Token guardado OK');",
+                  "} else {",
+                  "  console.error('ERROR: no hay token en la respuesta ->', JSON.stringify(json));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"password\": \"cliente123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Producto",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/productos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/productos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Producto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Auriculares Bluetooth\",\n  \"descripcion\": \"Auriculares inalambricos con cancelacion de ruido y bateria de 30 horas\",\n  \"precio\": 29999.99,\n  \"stock\": 50,\n  \"categoriaIds\": [1]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/productos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Producto",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Auriculares Bluetooth Pro\",\n  \"descripcion\": \"Auriculares inalambricos premium con cancelacion de ruido activa y bateria de 40 horas\",\n  \"precio\": 34999.99,\n  \"stock\": 40,\n  \"categoriaIds\": [1]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/productos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrar Producto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/productos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categoria",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Nombre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias/nombre/Electronica",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "nombre", "Electronica"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Categoria",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Electronica\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Categoria",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Tecnologia\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categorias/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrar Categoria",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Carrito",
+      "item": [
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/carritos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/carritos/usuario/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "usuario", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Carrito",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/carritos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agregar Producto al Carrito",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productoId\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/carritos/1/productos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "1", "productos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Producto del Carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/carritos/1/productos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "1", "productos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Vaciar Carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/carritos/1/vaciar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "1", "vaciar"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Total",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/carritos/1/total",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "1", "total"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pagar Carrito",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/carritos/1/pagar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "1", "pagar"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrar Carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/carritos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carritos", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pedido",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pedidos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pedidos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pedidos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pedidos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pedidos/usuario/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pedidos", "usuario", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Pedido",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"enviado\",\n  \"fechaEntrega\": \"2026-05-01T10:00:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pedidos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pedidos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrar Pedido",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pedidos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pedidos", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/email/juan@example.com",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios", "email", "juan@example.com"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Editado\",\n  \"apellido\": \"Perez Editado\",\n  \"telefono\": \"1199887766\",\n  \"direccion\": \"Av. Santa Fe 4321, CABA\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrar Usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

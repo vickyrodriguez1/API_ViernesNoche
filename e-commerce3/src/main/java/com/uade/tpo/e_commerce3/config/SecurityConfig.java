@@ -33,6 +33,8 @@ public class SecurityConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/productos", "/api/productos/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/categorias", "/api/categorias/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/productos", "/api/productos/**").hasRole(RolEnum.ADMIN.name())
                     .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole(RolEnum.ADMIN.name())
                     .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole(RolEnum.ADMIN.name())
