@@ -8,8 +8,10 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ItemCarritoResponseDTO {
-    private Double subtotal;
-    private Double precioUnitario;
-    private Integer cantidad;
+    private Long id;
+    private Long productoId;
     private String productoNombre;
+    private Integer cantidad;
+    private Double precioUnitario;
+    private Double subtotal;
 }

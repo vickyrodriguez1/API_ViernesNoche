@@ -30,6 +30,7 @@ public class CarritoMapper {
         }
 
         return new CarritoResponseDTO(
+                carrito.getId(),
                 carrito.getFechaCreacion(),
                 carrito.getFechaActualizacion(),
                 items,
@@ -41,12 +42,15 @@ public class CarritoMapper {
         int cantidad = item.getCantidad() != null ? item.getCantidad() : 0;
         double subtotal = precio != null ? precio * cantidad : 0.0;
 
+        Long productoId = item.getProducto() != null ? item.getProducto().getId() : null;
         String productoNombre = item.getProducto() != null ? item.getProducto().getNombre() : null;
 
         return new ItemCarritoResponseDTO(
-                subtotal,
-                precio,
+                item.getId(),
+                productoId,
+                productoNombre,
                 cantidad,
-                productoNombre);
+                precio,
+                subtotal);
     }
 }

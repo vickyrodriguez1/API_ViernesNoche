@@ -14,8 +14,6 @@ import com.uade.tpo.e_commerce3.model.Pedido;
 import com.uade.tpo.e_commerce3.model.Producto;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.repository.PedidoRepository;
-import com.uade.tpo.e_commerce3.repository.ProductoRepository;
-import com.uade.tpo.e_commerce3.repository.UsuarioRepository;
 import com.uade.tpo.e_commerce3.service.mapper.PedidoMapper;
 
 import jakarta.transaction.Transactional;
@@ -58,7 +56,7 @@ public class PedidoService {
     }
 
     public PedidoResponseDTO savePedido(PedidoRequestDTO request) {
-        Usuario usuario = usuarioService.getUsuarioEntityById(request.getUsuarioId());;
+        Usuario usuario = usuarioService.getUsuarioEntityById(request.getUsuarioId());
 
         Producto producto = productoService.getProductoEntityById(request.getProductoId());
 

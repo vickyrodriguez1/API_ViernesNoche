@@ -1,5 +1,7 @@
 package com.uade.tpo.e_commerce3.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,8 @@ import com.uade.tpo.e_commerce3.dto.AgregarProductoRequest;
 import com.uade.tpo.e_commerce3.dto.CarritoRequestDTO;
 import com.uade.tpo.e_commerce3.dto.CarritoResponseDTO;
 import com.uade.tpo.e_commerce3.service.CarritoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/carritos")
@@ -41,15 +45,16 @@ public class CarritoController {
     // POST - crear nuevo carrito
     // http://localhost:8080/api/carritos
     @PostMapping
-    public ResponseEntity<CarritoResponseDTO> crearCarrito(@RequestBody CarritoRequestDTO request) {
-        return ResponseEntity.ok(carritoService.crearCarrito(request.getUsuarioId()));
+    public ResponseEntity<CarritoResponseDTO> crearCarrito(@Valid @RequestBody CarritoRequestDTO request) {
+        CarritoResponseDTO created = carritoService.crearCarrito(request.getUsuarioId());
+        return ResponseEntity.created(URI.create("/api/carritos/" + created.getId())).body(created);
     }
 
     // POST - agregar producto al carrito
     // http://localhost:8080/api/carritos/1/productos
     @PostMapping("/{carritoId}/productos")
     public ResponseEntity<CarritoResponseDTO> agregarProducto(@PathVariable Long carritoId,
-            @RequestBody AgregarProductoRequest request) {
+            @Valid @RequestBody AgregarProductoRequest request) {
         return ResponseEntity.ok(carritoService.agregarProducto(carritoId, request.getProductoId(), request.getCantidad()));
     }
 
@@ -58,7 +63,7 @@ public class CarritoController {
     @PutMapping("/{carritoId}/items/{itemId}")
     public ResponseEntity<CarritoResponseDTO> actualizarCantidad(@PathVariable Long carritoId,
             @PathVariable Long itemId,
-            @RequestBody ActualizarCantidadRequest request) {
+            @Valid @RequestBody ActualizarCantidadRequest request) {
         return ResponseEntity.ok(carritoService.actualizarCantidad(carritoId, itemId, request.getCantidad()));
     }
 
