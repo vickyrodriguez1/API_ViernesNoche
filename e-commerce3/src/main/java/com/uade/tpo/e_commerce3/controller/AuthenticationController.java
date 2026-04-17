@@ -20,6 +20,8 @@ import com.uade.tpo.e_commerce3.dto.UsuarioLoginDTO;
 import com.uade.tpo.e_commerce3.dto.UsuarioRegistroDTO;
 import com.uade.tpo.e_commerce3.service.AuthService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
@@ -35,13 +37,13 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> registrar(@RequestBody UsuarioRegistroDTO dto) {
+    public ResponseEntity<AuthResponseDTO> registrar(@Valid @RequestBody UsuarioRegistroDTO dto) {
             AuthResponseDTO response = authService.registrar(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDTO> login(@RequestBody UsuarioLoginDTO request) {
+    public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody UsuarioLoginDTO request) {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
