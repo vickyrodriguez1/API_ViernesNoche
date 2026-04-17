@@ -48,21 +48,6 @@ public class UsuarioController {
         return usuarioService.getUsuarioByEmail(email);
     }
 
-   /* // POST - crear nuevo usuario
-   // http://localhost:8080/api/usuarios
-    @PostMapping
-   public Usuario saveUsuario(@Valid @RequestBody Usuario usuario) {
-       return usuarioService.saveUsuario(usuario);
-    }*/
-
-    @PostMapping
-    public Usuario saveUsuario(@Valid @RequestBody UsuarioRegistroDTO request) {
-    // Al igual que en Producto, le pasamos el DTO directamente al Service
-    return usuarioService.saveUsuario(request);
-}
-
- 
-
     // PUT - actualizar usuario
     // http://localhost:8080/api/usuarios/1
     @PutMapping("/updateUsuario/{id}")

@@ -10,6 +10,13 @@ Api REST desarrollada con Spring Boot para gestionar una tienda en línea con Pr
 - ✅ Relaciones entre entidades (Pedido-Usuario, Pedido-Producto)
 - ✅ Base de datos H2 (desarrollo) o MySQL (producción)
 - ✅ API RESTful
+- ✅ Autenticacion con JWT 
+- ✅ Endpoints publicos para registro/login
+- ✅ Endpoints protegidos para operaciones de negocio
+- ✅ Manejo centralizado de errores con `GlobalExceptionHandler`
+- ✅ Soporte de perfiles:
+    - MySQL por defecto
+    - H2 activando profile `h2`
 
 ## Tecnologías
 
@@ -34,7 +41,6 @@ Api REST desarrollada con Spring Boot para gestionar una tienda en línea con Pr
 - `GET /api/usuarios` - Obtener todos los usuarios
 - `GET /api/usuarios/{id}` - Obtener usuario por ID
 - `GET /api/usuarios/email/{email}` - Obtener usuario por email
-- `POST /api/usuarios` - Crear nuevo usuario
 - `PUT /api/usuarios/{id}` - Actualizar usuario
 - `DELETE /api/usuarios/{id}` - Eliminar usuario
 
@@ -97,6 +103,12 @@ mvn spring-boot:run
 ```
 
 La aplicación estará disponible en `http://localhost:8080`
+
+
+#### Plus: Para usar H2 en lugar de MySQL, ejecutar con el perfil `h2`
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=h2
+```
 
 ## Ejemplos de Uso
 
@@ -182,7 +194,7 @@ curl -X POST http://localhost:8080/api/pedidos \
 ## Configuración de Base de Datos
 
 ### Desarrollo (H2)
-La configuración ya está lista en `application.properties`. Para acceder a la consola H2:
+La configuración ya está lista en `application-h2.properties`. Para acceder a la consola H2:
 `http://localhost:8080/h2-console`
 
 - URL: `jdbc:h2:mem:ecommerce`
@@ -190,7 +202,7 @@ La configuración ya está lista en `application.properties`. Para acceder a la 
 - Contraseña: (vacía)
 
 ### Producción (MySQL)
-Para usar MySQL, actualizar `application.properties`:
+Para usar MySQL, se usa la configuracion en `application.properties`:
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce
 spring.datasource.username=root

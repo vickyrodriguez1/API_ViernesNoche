@@ -1,5 +1,6 @@
 package com.uade.tpo.e_commerce3.dto;
 
+import com.uade.tpo.e_commerce3.model.RolEnum;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -28,5 +29,5 @@ public class UsuarioRegistroDTO {
     @Size(max = 100, message = "La dirección no puede exceder 100 caracteres")
     private String direccion;
     
-    private String rol;
+    private RolEnum rol;
 }
