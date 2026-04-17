@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.e_commerce3.model.Pedido;
-import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.service.PedidoService;
-import com.uade.tpo.e_commerce3.service.UsuarioService;
 
 @RestController
 @RequestMapping("/api/pedidos")
@@ -22,9 +20,6 @@ public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
-
-    @Autowired
-    private UsuarioService usuarioService;
 
     // GET all pedidos
     // http://localhost:8080/api/pedidos
@@ -44,8 +39,7 @@ public class PedidoController {
     // http://localhost:8080/api/pedidos/usuario/1
     @GetMapping("/usuario/{usuarioId}")
     public List<Pedido> getPedidosByUsuario(@PathVariable Long usuarioId) {
-        Usuario usuario = usuarioService.getUsuarioById(usuarioId);
-        return pedidoService.getPedidosByUsuario(usuario);
+        return pedidoService.getPedidosByUsuario(usuarioId);
     }
 
     // PUT - actualizar estado o fecha de entrega del pedido

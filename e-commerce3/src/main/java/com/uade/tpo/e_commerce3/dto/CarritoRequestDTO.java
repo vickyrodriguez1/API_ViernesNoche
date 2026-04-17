@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
-public class CarritoRequest {
+public class CarritoRequestDTO {
     
     @NotNull(message = "El ID del usuario es obligatorio")
     @Positive(message = "El ID del usuario debe ser positivo")

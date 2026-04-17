@@ -10,6 +10,7 @@ import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Pedido;
 import com.uade.tpo.e_commerce3.model.Usuario;
 import com.uade.tpo.e_commerce3.repository.PedidoRepository;
+import com.uade.tpo.e_commerce3.repository.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -20,16 +21,20 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public List<Pedido> getAllPedidos() {
         return pedidoRepository.findAll();
     }
 
     public Pedido getPedidoById(Long id) {
-        return pedidoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado con id: " + id));
+        return getPedidoEntityById(id);
     }
 
-    public List<Pedido> getPedidosByUsuario(Usuario usuario) {
+    public List<Pedido> getPedidosByUsuario(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + usuarioId));
         return pedidoRepository.findByUsuario(usuario);
     }
 
@@ -48,12 +53,17 @@ public class PedidoService {
     }
 
     public Pedido updatePedido(Long id, Pedido pedido) {
-        Pedido existingPedido = getPedidoById(id);
+        Pedido existingPedido = getPedidoEntityById(id);
         existingPedido.setUsuario(pedido.getUsuario());
         existingPedido.setProductos(pedido.getProductos());
         existingPedido.setPrecioTotal(pedido.getPrecioTotal());
         existingPedido.setEstado(pedido.getEstado());
         existingPedido.setFechaEntrega(pedido.getFechaEntrega());
         return pedidoRepository.save(existingPedido);
+    }
+
+    private Pedido getPedidoEntityById(Long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado con id: " + id));
     }
 }

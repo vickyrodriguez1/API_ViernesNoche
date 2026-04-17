@@ -61,8 +61,7 @@ public class CarritoService {
     }
 
     public Carrito getCarritoById(Long id) {
-        return carritoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado con id: " + id));
+        return getCarritoEntityById(id);
     }
 
     public Carrito getCarritoPorUsuario(Long usuarioId) {
@@ -71,7 +70,7 @@ public class CarritoService {
     }
 
     public Carrito agregarProducto(Long carritoId, Long productoId) {
-        Carrito carrito = getCarritoById(carritoId);
+        Carrito carrito = getCarritoEntityById(carritoId);
 
         Producto producto = productoRepository.findById(productoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + productoId));
@@ -89,7 +88,7 @@ public class CarritoService {
     }
 
     public Carrito eliminarProducto(Long carritoId, Long productoId) {
-        Carrito carrito = getCarritoById(carritoId);
+        Carrito carrito = getCarritoEntityById(carritoId);
 
         boolean removed = carrito.getProductos().removeIf(p -> p.getId().equals(productoId));
 
@@ -102,21 +101,21 @@ public class CarritoService {
     }
 
     public Carrito vaciarCarrito(Long carritoId) {
-        Carrito carrito = getCarritoById(carritoId);
+        Carrito carrito = getCarritoEntityById(carritoId);
         carrito.getProductos().clear();
         carrito.setFechaActualizacion(LocalDateTime.now());
         return carritoRepository.save(carrito);
     }
 
     public Double calcularTotal(Long carritoId) {
-        Carrito carrito = getCarritoById(carritoId);
+        Carrito carrito = getCarritoEntityById(carritoId);
         return carrito.getProductos().stream()
                 .mapToDouble(Producto::getPrecio)
                 .sum();
     }
 
     public Pedido pagar(Long carritoId) {
-        Carrito carrito = getCarritoById(carritoId);
+        Carrito carrito = getCarritoEntityById(carritoId);
 
         if (carrito.getProductos().isEmpty()) {
             throw new ArgumentInvalidException("El carrito está vacío, no se puede generar un pedido");
@@ -140,5 +139,10 @@ public class CarritoService {
 
     public void deleteCarrito(Long carritoId) {
         carritoRepository.deleteById(carritoId);
+    }
+
+    private Carrito getCarritoEntityById(Long id) {
+        return carritoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado con id: " + id));
     }
 }
