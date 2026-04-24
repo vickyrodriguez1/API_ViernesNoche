@@ -4,6 +4,7 @@ import com.uade.tpo.e_commerce3.dto.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,6 +39,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponseDTO> handleBadCredentials(BadCredentialsException ex) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, "BAD_CREDENTIALS", "Credenciales invalidas");
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInternalAuthenticationService(InternalAuthenticationServiceException ex) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "AUTHENTICATION_ERROR", "Error de autenticacion");
     }
 
     @ExceptionHandler(Exception.class)
