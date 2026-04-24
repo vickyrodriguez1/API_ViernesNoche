@@ -1,7 +1,7 @@
 package com.uade.tpo.e_commerce3.config;
 
 import com.uade.tpo.e_commerce3.model.RolEnum;
-import com.uade.tpo.e_commerce3.service.UsuarioService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,7 +38,19 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole(RolEnum.ADMIN.name())
                     .anyRequest().authenticated()
             )
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+            .exceptionHandling(ex -> ex
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"status\":403,\"code\":\"ACCESS_DENIED\",\"message\":\"No tenes permisos para realizar esta accion\"}");
+                })
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"status\":401,\"code\":\"UNAUTHORIZED\",\"message\":\"Autenticacion requerida. Proporciona un token valido\"}");
+                })
+            )
+            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
