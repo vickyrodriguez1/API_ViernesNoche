@@ -57,7 +57,7 @@ public class ProductoService {
         return productoMapper.toDto(getProductoEntityById(id));
     }
 
-    public Producto getProductoEntityById(Long id) {
+    private Producto getProductoEntityById(Long id) {
         return productoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + id));
     }

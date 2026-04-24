@@ -61,12 +61,12 @@ public class UsuarioService implements UserDetailsService {
         return new SecurityUser(user);
     }
 
-    public Usuario getUsuarioEntityById(Long id) {
+    private Usuario getUsuarioEntityById(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
     }
 
-    public Usuario getUsuarioEntityByEmail(String email) {
+    private Usuario getUsuarioEntityByEmail(String email) {
         return usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con email: " + email));
     }
