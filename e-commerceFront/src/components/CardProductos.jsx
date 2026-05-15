@@ -5,27 +5,41 @@ const CardProductos = ({ product }) => {
   return (
     <div className="card-producto">
       <div className="producto-imagen-container">
-        <img 
-          src={product.imagen} 
-          alt={product.nombre} 
-          className="producto-imagen"
-        />
-        <span className="producto-categoria">{product.categoria}</span>
+        {product.imagen ? (
+          <img 
+            src={product.imagen} 
+            alt={product.nombre} 
+            className="producto-imagen"
+          />
+        ) : (
+          <div style={{ width: '100%', height: '200px', backgroundColor: '#e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            Sin imagen
+          </div>
+        )}
+        {product.categoria && (
+          <span className="producto-categoria">{product.categoria}</span>
+        )}
       </div>
       
       <div className="producto-info">
         <h3 className="producto-nombre">{product.nombre}</h3>
-        <p className="producto-descripcion">{product.descripcion}</p>
+        {product.descripcion && (
+          <p className="producto-descripcion">{product.descripcion}</p>
+        )}
         
-        <div className="producto-rating">
-          <span className="stars">⭐ {product.rating}</span>
-        </div>
+        {product.rating && (
+          <div className="producto-rating">
+            <span className="stars">⭐ {product.rating}</span>
+          </div>
+        )}
         
-        <div className="producto-stock">
-          <span className={product.stock > 0 ? 'en-stock' : 'sin-stock'}>
-            {product.stock > 0 ? `Stock: ${product.stock}` : 'Agotado'}
-          </span>
-        </div>
+        {product.stock !== undefined && (
+          <div className="producto-stock">
+            <span className={product.stock > 0 ? 'en-stock' : 'sin-stock'}>
+              {product.stock > 0 ? `Stock: ${product.stock}` : 'Agotado'}
+            </span>
+          </div>
+        )}
         
         <div className="producto-footer">
           <span className="producto-precio">${product.precio}</span>
