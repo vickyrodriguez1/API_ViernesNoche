@@ -1,4 +1,4 @@
-import { useState } from 'react'
+/*import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -119,4 +119,46 @@ function App() {
   )
 }
 
+export default <App></App>
+*/
+
+
+import React, { useState, useEffect } from 'react'
+import LoginForm from './components/LoginForm'
+import ProductList from './components/ProductList' // El componente de tus compañeros
+import './App.css'
+
+function App() {
+  // Creamos un estado para saber si el usuario inició sesión
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // useEffect revisa si ya hay un token guardado apenas se abre la página
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      setIsLoggedIn(true)
+    }
+  }, [])
+
+  // Esta función se la vamos a pasar al Login para que le avise a App cuando tenga éxito
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true)
+  }
+
+  return (
+    <>
+      {isLoggedIn ? (
+        // Si está logueado, mostramos el listado de productos
+        <ProductList />
+      ) : (
+        // Si no está logueado, mostramos tu formulario de Login
+        <LoginForm onLoginSuccess={handleLoginSuccess} />
+      )}
+    </>
+  )
+}
+
 export default App
+
+
+
