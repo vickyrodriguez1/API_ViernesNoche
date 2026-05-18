@@ -38,13 +38,26 @@ export default function LoginForm({ onLoginSuccess }) {
             const data = await response.json();
             
             // Guardamos el token en el almacenamiento local del navegador
-            localStorage.setItem('token', data.token); 
+            localStorage.setItem('token', data.token);
+
+            // Decodificamos el JWT para extraer el email (está en el campo "sub")
+            const payload = JSON.parse(atob(data.token.split('.')[1]));
+            const emailDelToken = payload.sub;
+
+            // Consultamos el rol del usuario usando el email
+            const userResponse = await fetch(`http://localhost:8080/api/usuarios/email/${emailDelToken}`, {
+                headers: { 'Authorization': `Bearer ${data.token}` }
+            });
+            const userData = await userResponse.json();
+            
+            // Guardamos el rol en localStorage para usarlo en otros componentes
+            localStorage.setItem('userRol', userData.rol);
 
             alert('¡Inicio de sesión correcto!');
             
-            // 🔥 LE AVISAMOS A APP.JSX QUE CAMBIE LA PANTALLA INMEDIATAMENTE
+            // Le avisamos a App.jsx que cambie la pantalla, pasando el rol
             if (onLoginSuccess) {
-                onLoginSuccess();
+                onLoginSuccess(userData.rol);
             }
 
         } catch (error) {

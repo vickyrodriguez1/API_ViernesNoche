@@ -125,36 +125,60 @@ export default <App></App>
 
 import React, { useState, useEffect } from 'react'
 import LoginForm from './components/LoginForm'
-import ProductList from './components/ProductList' // El componente de tus compañeros
+import ProductList from './components/ProductList'
+import CrearProducto from './components/CrearProducto'
 import './App.css'
 
 function App() {
-  // Creamos un estado para saber si el usuario inició sesión
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userRol, setUserRol] = useState(null)
 
-  // useEffect revisa si ya hay un token guardado apenas se abre la página
+  // Al abrir la página, revisamos si ya hay sesión guardada
   useEffect(() => {
     const token = localStorage.getItem('token')
+    const rol = localStorage.getItem('userRol')
     if (token) {
       setIsLoggedIn(true)
+      setUserRol(rol)
     }
   }, [])
 
-  // Esta función se la vamos a pasar al Login para que le avise a App cuando tenga éxito
-  const handleLoginSuccess = () => {
+  // Recibe el rol cuando el login es exitoso
+  const handleLoginSuccess = (rol) => {
     setIsLoggedIn(true)
+    setUserRol(rol)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('userRol')
+    setIsLoggedIn(false)
+    setUserRol(null)
+  }
+
+  if (!isLoggedIn) {
+    return <LoginForm onLoginSuccess={handleLoginSuccess} />
   }
 
   return (
-    <>
-      {isLoggedIn ? (
-        // Si está logueado, mostramos el listado de productos
-        <ProductList />
-      ) : (
-        // Si no está logueado, mostramos tu formulario de Login
-        <LoginForm onLoginSuccess={handleLoginSuccess} />
-      )}
-    </>
+    <div>
+      <div style={{ textAlign: 'right', padding: '10px 20px', background: '#f8f9fa', borderBottom: '1px solid #ddd' }}>
+        <span style={{ marginRight: '15px', fontWeight: 'bold' }}>
+          Rol: <span style={{ color: userRol === 'ADMIN' ? '#28a745' : '#007bff' }}>{userRol}</span>
+        </span>
+        <button
+          onClick={handleLogout}
+          style={{ padding: '6px 16px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        >
+          Cerrar sesión
+        </button>
+      </div>
+
+      {/* Solo el ADMIN ve el formulario para crear productos */}
+      {userRol === 'ADMIN' && <CrearProducto />}
+
+      <ProductList />
+    </div>
   )
 }
 
