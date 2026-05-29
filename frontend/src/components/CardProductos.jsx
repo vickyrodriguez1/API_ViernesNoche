@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './CardProductos.css';
 
 const CardProductos = ({ product }) => {
@@ -22,7 +23,11 @@ const CardProductos = ({ product }) => {
       </div>
       
       <div className="producto-info">
-        <h3 className="producto-nombre">{product.nombre}</h3>
+        <h3 className="producto-nombre">
+          <Link to={`/products/${product.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+            {product.nombre}
+          </Link>
+        </h3>
         {product.descripcion && (
           <p className="producto-descripcion">{product.descripcion}</p>
         )}

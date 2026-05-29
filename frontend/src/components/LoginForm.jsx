@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm({ onLoginSuccess }) {
+    const navigate = useNavigate();
     // 1. Estados para guardar los datos de entrada y errores
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -52,13 +54,14 @@ export default function LoginForm({ onLoginSuccess }) {
             
             // Guardamos el rol en localStorage para usarlo en otros componentes
             localStorage.setItem('userRol', userData.rol);
+            localStorage.setItem('userId', userData.id);
 
             alert('¡Inicio de sesión correcto!');
-            
-            // Le avisamos a App.jsx que cambie la pantalla, pasando el rol
+
             if (onLoginSuccess) {
                 onLoginSuccess(userData.rol);
             }
+            navigate('/');
 
         } catch (error) {
             setErrorMessage(error.message);
