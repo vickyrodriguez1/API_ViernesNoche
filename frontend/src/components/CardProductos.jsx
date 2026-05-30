@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { FavoriteContext } from '../context/FavoriteContext';
 import './CardProductos.css';
 
 const CardProductos = ({ product }) => {
+  const { favoriteItems, addToFavorite } = useContext(FavoriteContext)
+  const isFavorite = favoriteItems.some((p) => p.id === product.id)
+
   return (
     <div className="card-producto">
       <div className="producto-imagen-container">
@@ -48,7 +52,16 @@ const CardProductos = ({ product }) => {
         
         <div className="producto-footer">
           <span className="producto-precio">${product.precio}</span>
-          <button className="btn-agregar">Agregar</button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              onClick={() => addToFavorite(product)}
+              style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}
+              title={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+            >
+              {isFavorite ? '❤️' : '🤍'}
+            </button>
+            <button className="btn-agregar">Agregar</button>
+          </div>
         </div>
       </div>
     </div>

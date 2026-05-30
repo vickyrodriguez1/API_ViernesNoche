@@ -24,6 +24,7 @@ export default function Header({ userRol, onLogout }) {
         </Link>
         <Link to="/products" style={{ textDecoration: 'none', color: '#007bff' }}>Productos</Link>
         <Link to="/checkout" style={{ textDecoration: 'none', color: '#007bff' }}>Checkout</Link>
+        <Link to="/favorites" style={{ textDecoration: 'none', color: '#e83e8c' }}>❤️ Favoritos</Link>
         {userRol === 'ADMIN' && (
           <Link to="/create-product" style={{ textDecoration: 'none', color: '#28a745' }}>
             Crear producto

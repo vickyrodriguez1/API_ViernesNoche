@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+
 
 export default function ProductDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -31,14 +33,18 @@ export default function ProductDetail() {
     return (
       <div style={{ textAlign: 'center', marginTop: '40px' }}>
         <p>Error: {error}</p>
-        <Link to="/products">Volver a productos</Link>
+        <button onClick={() => navigate('/products')} style={{ color: '#007bff', background: 'none', border: 'none', cursor: 'pointer' }}>
+          Volver a productos
+        </button>
       </div>
     )
   }
 
   return (
     <div style={{ maxWidth: '500px', margin: '30px auto', padding: '25px', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <Link to="/products" style={{ color: '#007bff' }}>← Volver</Link>
+      <button onClick={() => navigate(-1)} style={{ color: '#007bff', background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>
+        ← Volver
+      </button>
       <h2 style={{ marginTop: '15px' }}>{product.nombre}</h2>
       <p style={{ color: '#666' }}>{product.descripcion}</p>
       <p style={{ fontSize: '22px', fontWeight: 'bold', color: '#28a745' }}>${product.precio}</p>

@@ -9,6 +9,8 @@ import AppLayout from './components/AppLayout'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Checkout from './pages/Checkout'
+import Favorite from './pages/Favorite'
+import { FavoriteProvider } from './context/FavoriteContext'
 import './App.css'
 
 function App() {
@@ -40,6 +42,7 @@ function App() {
   }
 
   return (
+    <FavoriteProvider>
     <BrowserRouter>
       <Routes>
         <Route
@@ -61,6 +64,7 @@ function App() {
             <Route path="/products" element={<ProductList />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/favorites" element={<Favorite />} />
             <Route
               path="/create-product"
               element={
@@ -84,6 +88,7 @@ function App() {
         />
       </Routes>
     </BrowserRouter>
+    </FavoriteProvider>
   )
 }
 
