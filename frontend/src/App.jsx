@@ -4,7 +4,7 @@ import LoginForm from './components/LoginForm'
 import ProductList from './components/ProductList'
 import CrearProducto from './components/CrearProducto'
 import ProtectedRoute from './components/ProtectedRoute'
-import AdminRoute from './components/AdminRoute'
+import AdminRouter from "./components/AdminRouter"
 import AppLayout from './components/AppLayout'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
@@ -64,9 +64,9 @@ function App() {
             <Route
               path="/create-product"
               element={
-                <AdminRoute>
+                <AdminRouter>
                   <CrearProducto />
-                </AdminRoute>
+                </AdminRouter>
               }
             />
           </Route>

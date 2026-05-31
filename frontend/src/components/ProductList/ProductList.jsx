@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import CardProductos from './CardProductos/CardProductos';
-import './ProductList.css';
+import CardProductos from '../CardProductos';
+import styles from './ProductList.module.css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -27,18 +27,18 @@ const ProductList = () => {
   }, []);
 
   // Estados de carga y error
-  if (loading) return <div className="product-list-container"><p>Cargando productos...</p></div>;
-  if (error) return <div className="product-list-container"><p>Error: {error}</p></div>;
+  if (loading) return <div className={styles.container}><p>Cargando productos...</p></div>;
+  if (error) return <div className={styles.container}><p>Error: {error}</p></div>;
 
   return (
-    <div className="product-list-container">
-      <h2 className="product-list-title">Nuestros Productos</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Nuestros Productos</h2>
       {products.length === 0 ? (
         <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>
           No hay productos disponibles en este momento.
         </p>
       ) : (
-        <div className="products-grid">
+        <div className={styles.grid}>
           {products.map((product) => (
             <CardProductos key={product.id} product={product} />
           ))}
