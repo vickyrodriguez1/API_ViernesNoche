@@ -1,25 +1,26 @@
 .card {
   background: white;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
+  border: 1px solid #e5e7eb;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
 .imageContainer {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
-  background: #f5f5f5;
+  background: #f0f1f3;
 }
 
 .image {
@@ -30,43 +31,46 @@
 }
 
 .card:hover .image {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .imagePlaceholder {
   width: 100%;
-  height: 200px;
-  background-color: #e0e0e0;
+  height: 220px;
+  background-color: #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #999;
+  font-weight: 500;
 }
 
 .badge {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #007bff;
+  top: 12px;
+  right: 12px;
+  background: #ff9500;
   color: white;
-  padding: 0.35rem 0.75rem;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .content {
-  padding: 1.25rem;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-  margin: 0 0 0.5rem 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 0 0 8px 0;
   line-height: 1.3;
   max-height: 2.6rem;
   overflow: hidden;
@@ -77,9 +81,9 @@
 }
 
 .description {
-  font-size: 0.9rem;
+  font-size: 13px;
   color: #666;
-  margin: 0 0 1rem 0;
+  margin: 0 0 12px 0;
   line-height: 1.4;
   max-height: 2.8rem;
   overflow: hidden;
@@ -90,29 +94,29 @@
 }
 
 .rating {
-  margin: 0.75rem 0;
+  margin: 8px 0;
 }
 
 .stars {
-  font-size: 0.95rem;
-  color: #ff9800;
-  font-weight: 500;
+  font-size: 13px;
+  color: #ff9500;
+  font-weight: 600;
 }
 
 .stock {
-  margin: 0.75rem 0;
+  margin: 8px 0;
 }
 
 .inStock {
-  color: #4caf50;
-  font-size: 0.9rem;
-  font-weight: 600;
+  color: #22c55e;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .outOfStock {
-  color: #f44336;
-  font-size: 0.9rem;
-  font-weight: 600;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .footer {
@@ -120,32 +124,35 @@
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid #eee;
+  padding-top: 12px;
+  border-top: 1px solid #f0f1f3;
 }
 
 .price {
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 700;
-  color: #28bf41;
+  color: #22c55e;
 }
 
 .addButton {
-  background: #007bff;
+  background: #1e3a5f;
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
-  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s ease;
-  font-size: 0.9rem;
+  transition: all 0.3s;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(30, 58, 95, 0.15);
 }
 
 .addButton:hover {
-  background: #0056b3;
+  background: #152847;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
 }
 
 .addButton:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
