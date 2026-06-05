@@ -1,11 +1,11 @@
 :root {
-  --text: #4b5563;
-  --text-h: #1e3a5f;
+  --text: #6b7280;
+  --text-h: #1f2937;
   --bg: #ffffff;
   --border: #e5e7eb;
-  --primary: #1e3a5f;
-  --accent: #ff9500;
-  --accent-light: rgba(255, 149, 0, 0.1);
+  --primary: #2563eb;
+  --accent: #f59e0b;
+  --accent-light: rgba(245, 158, 11, 0.1);
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -24,7 +24,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #f5f7fa;
+  background-color: #f9fafb;
 }
 
 #root {

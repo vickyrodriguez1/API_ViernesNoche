@@ -10,11 +10,7 @@ export default function Home({ userRol }) {
       <p className={styles.subtitle}>
         Explora nuestros productos y gestiona tu carrito de compras
       </p>
-
-      <div className={styles.userInfo}>
-        Sesión iniciada como <strong>{userRol}</strong>
-      </div>
-
+    
       <div className={styles.buttonsContainer}>
         <Link to="/products" className={`${styles.btn} ${styles.btnPrimary}`}>
           Ver productos

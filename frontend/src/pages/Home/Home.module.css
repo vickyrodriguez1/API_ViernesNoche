@@ -11,7 +11,7 @@
 .title {
   font-size: 42px;
   font-weight: 700;
-  color: #1e3a5f;
+  color: #2563eb;
   margin: 0 0 15px 0;
   letter-spacing: -0.5px;
 }
@@ -25,16 +25,16 @@
 .userInfo {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #f5f7fa;
-  border-left: 4px solid #ff9500;
+  background-color: #f9fafb;
+  border-left: 4px solid #f59e0b;
   border-radius: 6px;
   margin-bottom: 35px;
   font-size: 16px;
-  color: #1e3a5f;
+  color: #1f2937;
 }
 
 .userInfo strong {
-  color: #ff9500;
+  color: #f59e0b;
   font-weight: 700;
 }
 
@@ -61,14 +61,14 @@
 }
 
 .btnPrimary {
-  background-color: #1e3a5f;
+  background-color: #2563eb;
   color: white;
 }
 
 .btnPrimary:hover {
-  background-color: #152847;
+  background-color: #1d4ed8;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(30, 58, 95, 0.25);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
 }
 
 .btnPrimary:active {
@@ -76,14 +76,14 @@
 }
 
 .btnSecondary {
-  background-color: #6c757d;
+  background-color: #6366f1;
   color: white;
 }
 
 .btnSecondary:hover {
-  background-color: #5a6268;
+  background-color: #4f46e5;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.25);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
 }
 
 .btnSecondary:active {
@@ -91,14 +91,14 @@
 }
 
 .btnSuccess {
-  background-color: #22c55e;
+  background-color: #10b981;
   color: white;
 }
 
 .btnSuccess:hover {
-  background-color: #16a34a;
+  background-color: #059669;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.25);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
 }
 
 .btnSuccess:active {
