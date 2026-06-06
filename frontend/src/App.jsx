@@ -4,11 +4,12 @@ import LoginForm from './components/LoginForm'
 import ProductList from './components/ProductList'
 import CrearProducto from './components/CrearProducto'
 import ProtectedRoute from './components/ProtectedRoute'
-import AdminRouter from "./components/AdminRouter"
+import AdminRouter from './components/AdminRouter'
 import AppLayout from './components/AppLayout'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Checkout from './pages/Checkout'
+import Favorites from './pages/Favorites/Favorites'
 import './App.css'
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
           <Route element={<AppLayout userRol={userRol} onLogout={handleLogout} />}>
             <Route path="/" element={<Home userRol={userRol} />} />
             <Route path="/products" element={<ProductList />} />
+            <Route path="/favorites" element={<Favorites />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route

@@ -1,9 +1,11 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import styles from './Header.module.css'
 
 export default function Header({ userRol, onLogout }) {
   const navigate = useNavigate()
+  const favoriteCount = useSelector((state) => state.favorites.items.length)
 
   const handleLogout = () => {
     onLogout()
@@ -19,6 +21,9 @@ export default function Header({ userRol, onLogout }) {
       <nav className={styles.nav}>
         <Link to="/products" className={styles.navLink}>
           Productos
+        </Link>
+        <Link to="/favorites" className={styles.navLink}>
+          Favoritos {favoriteCount > 0 ? `(${favoriteCount})` : ''}
         </Link>
         <Link to="/checkout" className={styles.navLink}>
           Checkout

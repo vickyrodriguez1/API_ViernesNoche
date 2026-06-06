@@ -147,6 +147,33 @@
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
 }
 
+.footerActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.favoriteButton {
+  background: white;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.favoriteButton:hover {
+  background: #fef2f2;
+}
+
+.favorited {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
 .addButton:hover {
   background: #1d4ed8;
   transform: translateY(-2px);
