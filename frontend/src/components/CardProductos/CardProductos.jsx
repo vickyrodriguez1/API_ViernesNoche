@@ -2,12 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
-import styles from './CardProductos.module.css';
+import { addToCart } from '../../store/slices/cartSlice'
+import styles from './CardProductos.module.css'
 
 const CardProductos = ({ product }) => {
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.items);
+  const cartItems = useSelector((state) => state.cart.items);
   const isFavorite = favorites.some((item) => item?.id === product?.id);
+  const inCart = cartItems.some((item) => item?.id === product?.id);
 
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(product));
@@ -66,7 +69,14 @@ const CardProductos = ({ product }) => {
             >
               {isFavorite ? '♥ Favorito' : '♡ Favorito'}
             </button>
-            <button className={styles.addButton}>Agregar</button>
+            <button
+              className={styles.addButton}
+              type="button"
+              onClick={() => dispatch(addToCart(product))}
+              disabled={product.stock === 0}
+            >
+              {product.stock === 0 ? 'Agotado' : inCart ? 'Añadir otra' : 'Agregar'}
+            </button>
           </div>
         </div>
       </div>

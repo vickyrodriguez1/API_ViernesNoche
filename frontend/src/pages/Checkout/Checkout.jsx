@@ -1,116 +1,171 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
+import {
+  incrementQuantity,
+  decrementQuantity,
+  removeFromCart,
+  clearCart,
+} from '../../store/slices/cartSlice'
 
 export default function Checkout() {
-  const [carrito, setCarrito] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [mensaje, setMensaje] = useState('')
-  const [pagando, setPagando] = useState(false)
+  const dispatch = useDispatch()
+  const cartItems = useSelector((state) => state.cart.items)
+  const [message, setMessage] = useState('')
 
-  const token = localStorage.getItem('token')
-  const userId = localStorage.getItem('userId')
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.precio * item.quantity,
+    0,
+  )
 
-  const cargarCarrito = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`http://localhost:8080/api/carritos/usuario/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (!response.ok) {
-        throw new Error('No se pudo cargar el carrito')
-      }
-      const data = await response.json()
-      setCarrito(data)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
+  const handleConfirmPurchase = () => {
+    if (cartItems.length === 0) {
+      setMessage('No hay artículos en el carrito para procesar la compra.')
+      return
     }
+    dispatch(clearCart())
+    setMessage('¡Compra confirmada! Gracias por tu pedido.')
   }
-
-  useEffect(() => {
-    if (userId) {
-      cargarCarrito()
-    } else {
-      setLoading(false)
-      setError('No hay usuario asociado a la sesión')
-    }
-  }, [])
-
-  const handlePagar = async () => {
-    if (!carrito?.id) return
-    setPagando(true)
-    setMensaje('')
-    setError(null)
-    try {
-      const response = await fetch(`http://localhost:8080/api/carritos/${carrito.id}/pagar`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Error al procesar el pago')
-      }
-      const pedido = await response.json()
-      setMensaje(`¡Pedido #${pedido.id} confirmado! Total: $${pedido.precioTotal}`)
-      cargarCarrito()
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setPagando(false)
-    }
-  }
-
-  if (loading) return <p style={{ textAlign: 'center', marginTop: '40px' }}>Cargando carrito...</p>
 
   return (
-    <div style={{ maxWidth: '500px', margin: '30px auto', padding: '25px', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Checkout</h2>
+    <div style={{ maxWidth: '700px', margin: '30px auto', padding: '25px', border: '1px solid #ddd', borderRadius: '8px' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Carrito de compras</h2>
 
-      {error && (
-        <div style={{ color: 'red', backgroundColor: '#ffe6e6', padding: '10px', borderRadius: '4px', marginBottom: '15px', textAlign: 'center' }}>
-          {error}
+      {message && (
+        <div style={{
+          color: '#155724',
+          backgroundColor: '#d4edda',
+          padding: '12px',
+          borderRadius: '6px',
+          marginBottom: '18px',
+          textAlign: 'center',
+        }}>
+          {message}
         </div>
       )}
-      {mensaje && (
-        <div style={{ color: 'green', backgroundColor: '#e6ffe6', padding: '10px', borderRadius: '4px', marginBottom: '15px', textAlign: 'center' }}>
-          {mensaje}
-        </div>
-      )}
 
-      {!carrito || carrito.productos?.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#666' }}>Tu carrito está vacío.</p>
+      {cartItems.length === 0 ? (
+        <div style={{ textAlign: 'center', color: '#666' }}>
+          <p>Tu carrito está vacío.</p>
+          <Link to="/products" style={{ color: '#007bff' }}>
+            Ver productos
+          </Link>
+        </div>
       ) : (
         <>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {carrito.productos.map((p) => (
-              <li key={p.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-                {p.nombre} — ${p.precio}
-              </li>
+          <div style={{ marginBottom: '24px' }}>
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'auto 1fr auto',
+                  gap: '16px',
+                  alignItems: 'center',
+                  padding: '16px',
+                  borderBottom: '1px solid #eee',
+                }}
+              >
+                <div style={{ minWidth: '100px' }}>
+                  {item.imagen ? (
+                    <img
+                      src={item.imagen}
+                      alt={item.nombre}
+                      style={{ width: '100%', borderRadius: '8px', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div style={{
+                      width: '100px',
+                      height: '100px',
+                      background: '#f2f2f2',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#999',
+                    }}>
+                      Sin imagen
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <h3 style={{ margin: '0 0 6px 0' }}>{item.nombre}</h3>
+                  <p style={{ margin: 0, color: '#666' }}>${item.precio} por unidad</p>
+                  <p style={{ margin: '8px 0 0 0', color: '#333', fontWeight: '600' }}>
+                    Subtotal: ${item.precio * item.quantity}
+                  </p>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px', marginBottom: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => dispatch(decrementQuantity(item.id))}
+                      style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}
+                    >
+                      −
+                    </button>
+                    <span style={{ minWidth: '24px', textAlign: 'center' }}>{item.quantity}</span>
+                    <button
+                      type="button"
+                      onClick={() => dispatch(incrementQuantity(item.id))}
+                      disabled={item.stock !== undefined && item.quantity >= item.stock}
+                      style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => dispatch(removeFromCart(item.id))}
+                    style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #dc3545', background: '#fff', color: '#dc3545', cursor: 'pointer' }}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
             ))}
-          </ul>
-          <p style={{ fontSize: '20px', fontWeight: 'bold', marginTop: '15px' }}>
-            Total: ${carrito.total}
-          </p>
-          <button
-            type="button"
-            onClick={handlePagar}
-            disabled={pagando}
-            style={{
-              width: '100%',
-              marginTop: '15px',
-              padding: '12px',
-              background: pagando ? '#ccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              fontSize: '16px',
-              cursor: pagando ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {pagando ? 'Procesando...' : 'Confirmar compra'}
-          </button>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '18px' }}>
+              <span>Total</span>
+              <span>${total}</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleConfirmPurchase}
+              style={{
+                width: '100%',
+                padding: '14px',
+                background: '#007bff',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '16px',
+                cursor: 'pointer',
+              }}
+            >
+              Confirmar compra
+            </button>
+            <button
+              type="button"
+              onClick={() => dispatch(clearCart())}
+              style={{
+                width: '100%',
+                padding: '14px',
+                background: '#f8f9fa',
+                color: '#333',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                fontSize: '16px',
+                cursor: 'pointer',
+              }}
+            >
+              Vaciar carrito
+            </button>
+          </div>
         </>
       )}
     </div>

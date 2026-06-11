@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../../store/slices/cartSlice'
 
 export default function ProductDetail() {
+  const dispatch = useDispatch()
   const { id } = useParams()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -46,6 +49,24 @@ export default function ProductDetail() {
       {product.categorias?.length > 0 && (
         <p>Categorías: {product.categorias.join(', ')}</p>
       )}
+      <button
+        type="button"
+        onClick={() => dispatch(addToCart(product))}
+        disabled={product.stock === 0}
+        style={{
+          width: '100%',
+          padding: '12px 16px',
+          background: product.stock === 0 ? '#ccc' : '#007bff',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
+          marginTop: '18px',
+          fontSize: '16px',
+        }}
+      >
+        {product.stock === 0 ? 'Agotado' : 'Agregar al carrito'}
+      </button>
     </div>
   )
 }
