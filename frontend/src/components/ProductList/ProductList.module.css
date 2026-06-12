@@ -1,0 +1,128 @@
+.container {
+  padding: 48px 32px 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.14);
+  border: 1px solid rgba(249, 115, 22, 0.28);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: clamp(30px, 5vw, 42px);
+  margin: 0;
+  color: var(--color-text-strong);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  margin: 12px auto 0;
+  max-width: 520px;
+  color: var(--color-text);
+  font-size: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 26px;
+}
+
+.empty {
+  text-align: center;
+  font-size: 17px;
+  color: var(--color-text-muted);
+  padding: 60px 0;
+}
+
+/* Loading skeletons */
+.skeletonCard {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.skeletonImage {
+  height: 220px;
+}
+
+.skeletonLine {
+  height: 14px;
+  margin: 16px 18px;
+  border-radius: var(--radius-full);
+}
+
+.skeletonLine.short {
+  width: 50%;
+}
+
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--color-surface) 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    var(--color-surface) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.3s infinite linear;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* State message (error) */
+.stateMessage {
+  text-align: center;
+  max-width: 460px;
+  margin: 80px auto;
+  padding: 32px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+  }
+
+  .container {
+    padding: 28px 16px 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

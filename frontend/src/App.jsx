@@ -4,13 +4,12 @@ import LoginForm from './components/LoginForm'
 import ProductList from './components/ProductList'
 import CrearProducto from './components/CrearProducto'
 import ProtectedRoute from './components/ProtectedRoute'
-import AdminRoute from './components/AdminRoute'
+import AdminRouter from './components/AdminRouter'
 import AppLayout from './components/AppLayout'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Checkout from './pages/Checkout'
-import Favorite from './pages/Favorite'
-import { FavoriteProvider } from './context/FavoriteContext'
+import Favorites from './pages/Favorites/Favorites'
 import './App.css'
 
 function App() {
@@ -42,7 +41,6 @@ function App() {
   }
 
   return (
-    <FavoriteProvider>
     <BrowserRouter>
       <Routes>
         <Route
@@ -62,15 +60,15 @@ function App() {
           <Route element={<AppLayout userRol={userRol} onLogout={handleLogout} />}>
             <Route path="/" element={<Home userRol={userRol} />} />
             <Route path="/products" element={<ProductList />} />
+            <Route path="/favorites" element={<Favorites />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/favorites" element={<Favorite />} />
             <Route
               path="/create-product"
               element={
-                <AdminRoute>
+                <AdminRouter>
                   <CrearProducto />
-                </AdminRoute>
+                </AdminRouter>
               }
             />
           </Route>
@@ -88,7 +86,6 @@ function App() {
         />
       </Routes>
     </BrowserRouter>
-    </FavoriteProvider>
   )
 }
 

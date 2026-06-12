@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './LoginForm.module.css';
 
 export default function LoginForm({ onLoginSuccess }) {
     const navigate = useNavigate();
@@ -71,61 +72,55 @@ export default function LoginForm({ onLoginSuccess }) {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '30px', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Iniciar Sesión</h2>
-            
-            {/* Si hay un error, se muestra el cartelito rojo */}
-            {errorMessage && (
-                <div style={{ color: 'red', backgroundColor: '#ffe6e6', padding: '10px', borderRadius: '4px', marginBottom: '15px', textAlign: 'center' }}>
-                    {errorMessage}
-                </div>
-            )}
+        <div className={styles.container}>
+            <div className={styles.panel}>
+                <h2 className={styles.title}>Iniciar Sesión</h2>
+                <p className={styles.subtitle}>Ingresá tus datos para continuar</p>
 
-            <form onSubmit={handleSubmit}>
-                {/* Campo de Email */}
-                <div style={{ marginBottom: '15px' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email:</label>
-                    <input 
-                        type="email" 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="ejemplo@uade.edu.ar"
-                        required 
-                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
-                    />
-                </div>
+                {/* Cartel de error mejorado */}
+                {errorMessage && (
+                    <div className={styles.errorAlert}>
+                        ⚠️ {errorMessage}
+                    </div>
+                )}
 
-                {/* Campo de Contraseña */}
-                <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Contraseña:</label>
-                    <input 
-                        type="password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Ingresá tu contraseña"
-                        required 
-                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
-                    />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    {/* Campo de Email */}
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Email:</label>
+                        <input 
+                            type="email" 
+                            className={styles.input}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="ejemplo@uade.edu.ar"
+                            required 
+                        />
+                    </div>
 
-                {/* Botón de Enviar */}
-                <button 
-                    type="submit" 
-                    disabled={loading}
-                    style={{ 
-                        width: '100%', 
-                        padding: '12px', 
-                        background: loading ? '#ccc' : '#007bff', 
-                        color: 'white', 
-                        border: 'none', 
-                        borderRadius: '4px', 
-                        fontSize: '16px', 
-                        cursor: loading ? 'not-allowed' : 'pointer' 
-                    }}
-                >
-                    {loading ? 'Validando...' : 'Ingresar'}
-                </button>
-            </form>
+                    {/* Campo de Contraseña */}
+                    <div className={styles.formGroupPassword}>
+                        <label className={styles.label}>Contraseña:</label>
+                        <input 
+                            type="password" 
+                            className={styles.input}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Ingresá tu contraseña"
+                            required 
+                        />
+                    </div>
+
+                    {/* Botón de Enviar */}
+                    <button 
+                        type="submit" 
+                        disabled={loading}
+                        className={styles.button}
+                    >
+                        {loading ? 'Validando...' : 'Ingresar'}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
