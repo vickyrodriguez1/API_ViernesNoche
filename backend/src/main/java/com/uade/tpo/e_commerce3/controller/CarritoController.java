@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.e_commerce3.dto.ActualizarCantidadItemDTO;
+import com.uade.tpo.e_commerce3.dto.AgregarItemDTO;
 import com.uade.tpo.e_commerce3.dto.AgregarProductoRequest;
 import com.uade.tpo.e_commerce3.dto.CarritoRequestDTO;
 import com.uade.tpo.e_commerce3.dto.CarritoResponseDTO;
@@ -56,7 +59,15 @@ public class CarritoController {
         return ResponseEntity.created(URI.create("/api/carritos/" + created.getId())).body(created);
     }
 
-    // POST - agregar producto al carrito
+    // POST - agregar item al carrito
+    // http://localhost:8080/api/carritos/1/items
+    @PostMapping("/{carritoId}/items")
+    public ResponseEntity<CarritoResponseDTO> agregarItem(@PathVariable Long carritoId,
+            @Valid @RequestBody AgregarItemDTO request) {
+        return ResponseEntity.ok(carritoService.agregarItem(carritoId, request.getProductoId(), request.getCantidad()));
+    }
+
+    // POST - agregar producto al carrito (compatibilidad)
     // http://localhost:8080/api/carritos/1/productos
     @PostMapping("/{carritoId}/productos")
     public ResponseEntity<CarritoResponseDTO> agregarProducto(@PathVariable Long carritoId,
@@ -64,12 +75,29 @@ public class CarritoController {
         return ResponseEntity.ok(carritoService.agregarProducto(carritoId, request.getProductoId()));
     }
 
-    // DELETE - eliminar producto del carrito
+    // PUT - actualizar cantidad de un item
+    // http://localhost:8080/api/carritos/1/items/10
+    @PutMapping("/{carritoId}/items/{itemId}")
+    public ResponseEntity<CarritoResponseDTO> actualizarCantidadItem(@PathVariable Long carritoId,
+            @PathVariable Long itemId,
+            @Valid @RequestBody ActualizarCantidadItemDTO request) {
+        return ResponseEntity.ok(carritoService.actualizarCantidadItem(carritoId, itemId, request.getCantidad()));
+    }
+
+    // DELETE - eliminar item del carrito
+    // http://localhost:8080/api/carritos/1/items/10
+    @DeleteMapping("/{carritoId}/items/{itemId}")
+    public ResponseEntity<CarritoResponseDTO> eliminarItem(@PathVariable Long carritoId,
+            @PathVariable Long itemId) {
+        return ResponseEntity.ok(carritoService.eliminarItem(carritoId, itemId));
+    }
+
+    // DELETE - eliminar producto del carrito (compatibilidad)
     // http://localhost:8080/api/carritos/1/productos/2
     @DeleteMapping("/{carritoId}/productos/{productoId}")
     public ResponseEntity<CarritoResponseDTO> eliminarProducto(@PathVariable Long carritoId,
             @PathVariable Long productoId) {
-        return ResponseEntity.ok(carritoService.eliminarProducto(carritoId, productoId));
+        return ResponseEntity.ok(carritoService.eliminarItemPorProducto(carritoId, productoId));
     }
 
     // DELETE - vaciar carrito

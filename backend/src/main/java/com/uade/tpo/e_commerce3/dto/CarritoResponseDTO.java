@@ -15,6 +15,6 @@ public class CarritoResponseDTO {
     private Long usuarioId;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
-    private List<ProductoListDTO> productos;
+    private List<ItemResponseDTO> items;
     private Double total;
 }

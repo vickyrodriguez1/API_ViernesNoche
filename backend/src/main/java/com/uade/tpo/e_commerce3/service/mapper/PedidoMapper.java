@@ -6,23 +6,23 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.uade.tpo.e_commerce3.dto.PedidoResponseDTO;
-import com.uade.tpo.e_commerce3.dto.ProductoListDTO;
+import com.uade.tpo.e_commerce3.dto.ItemResponseDTO;
 import com.uade.tpo.e_commerce3.model.Pedido;
 
 @Component
 public class PedidoMapper {
 
+    private final ItemMapper itemMapper;
+
+    public PedidoMapper(ItemMapper itemMapper) {
+        this.itemMapper = itemMapper;
+    }
+
     public PedidoResponseDTO toDto(Pedido pedido) {
         if (pedido == null) return null;
 
-        List<ProductoListDTO> productos = pedido.getProductos().stream()
-                .map(p -> {
-                    ProductoListDTO dto = new ProductoListDTO();
-                    dto.setId(p.getId());
-                    dto.setNombre(p.getNombre());
-                    dto.setPrecio(p.getPrecio());
-                    return dto;
-                })
+        List<ItemResponseDTO> items = pedido.getItems().stream()
+                .map(itemMapper::toDto)
                 .collect(Collectors.toList());
 
         Long usuarioId = pedido.getUsuario() != null ? pedido.getUsuario().getId() : null;
@@ -30,7 +30,7 @@ public class PedidoMapper {
         return new PedidoResponseDTO(
                 pedido.getId(),
                 usuarioId,
-                productos,
+                items,
                 pedido.getPrecioTotal(),
                 pedido.getFechaPedido(),
                 pedido.getFechaEntrega(),

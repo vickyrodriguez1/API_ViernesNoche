@@ -12,6 +12,7 @@ import com.uade.tpo.e_commerce3.dto.PedidoResponseDTO;
 import com.uade.tpo.e_commerce3.exception.ArgumentInvalidException;
 import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Carrito;
+import com.uade.tpo.e_commerce3.model.Item;
 import com.uade.tpo.e_commerce3.model.Pedido;
 import com.uade.tpo.e_commerce3.model.Producto;
 import com.uade.tpo.e_commerce3.model.Usuario;
@@ -81,27 +82,68 @@ public class CarritoService {
     }
 
     public CarritoResponseDTO agregarProducto(Long carritoId, Long productoId) {
+        return agregarItem(carritoId, productoId, 1);
+    }
+
+    public CarritoResponseDTO agregarItem(Long carritoId, Long productoId, Integer cantidad) {
+        if (cantidad == null || cantidad < 1) {
+            throw new ArgumentInvalidException("La cantidad debe ser al menos 1");
+        }
+
         Carrito carrito = getCarritoEntityById(carritoId);
 
         Producto producto = productoRepository.findById(productoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + productoId));
 
-        boolean yaExiste = carrito.getProductos().stream()
-                .anyMatch(p -> p.getId().equals(productoId));
+        Item item = carrito.getItems().stream()
+                .filter(i -> i.getProducto().getId().equals(productoId))
+                .findFirst()
+                .orElse(null);
 
-        if (yaExiste) {
-            throw new ArgumentInvalidException("El producto ya está en el carrito");
+        if (item == null) {
+            item = new Item();
+            item.setProducto(producto);
+            item.setCantidad(cantidad);
+            item.setPrecioUnitario(producto.getPrecio());
+            item.setCarrito(carrito);
+            carrito.getItems().add(item);
+        } else {
+            item.setCantidad(item.getCantidad() + cantidad);
         }
 
-        carrito.getProductos().add(producto);
         carrito.setFechaActualizacion(LocalDateTime.now());
         return carritoMapper.toDto(carritoRepository.save(carrito));
     }
 
-    public CarritoResponseDTO eliminarProducto(Long carritoId, Long productoId) {
+    public CarritoResponseDTO actualizarCantidadItem(Long carritoId, Long itemId, Integer cantidad) {
+        if (cantidad == null || cantidad < 1) {
+            throw new ArgumentInvalidException("La cantidad debe ser al menos 1");
+        }
+
+        Carrito carrito = getCarritoEntityById(carritoId);
+        Item item = getItemEntityById(carrito, itemId);
+        item.setCantidad(cantidad);
+        carrito.setFechaActualizacion(LocalDateTime.now());
+        return carritoMapper.toDto(carritoRepository.save(carrito));
+    }
+
+    public CarritoResponseDTO eliminarItem(Long carritoId, Long itemId) {
         Carrito carrito = getCarritoEntityById(carritoId);
 
-        boolean removed = carrito.getProductos().removeIf(p -> p.getId().equals(productoId));
+        boolean removed = carrito.getItems().removeIf(item -> item.getId().equals(itemId));
+
+        if (!removed) {
+            throw new ResourceNotFoundException("El item con id " + itemId + " no está en el carrito");
+        }
+
+        carrito.setFechaActualizacion(LocalDateTime.now());
+        return carritoMapper.toDto(carritoRepository.save(carrito));
+    }
+
+    public CarritoResponseDTO eliminarItemPorProducto(Long carritoId, Long productoId) {
+        Carrito carrito = getCarritoEntityById(carritoId);
+
+        boolean removed = carrito.getItems().removeIf(item -> item.getProducto().getId().equals(productoId));
 
         if (!removed) {
             throw new ResourceNotFoundException("El producto con id " + productoId + " no está en el carrito");
@@ -113,39 +155,47 @@ public class CarritoService {
 
     public CarritoResponseDTO vaciarCarrito(Long carritoId) {
         Carrito carrito = getCarritoEntityById(carritoId);
-        carrito.getProductos().clear();
+        carrito.getItems().clear();
         carrito.setFechaActualizacion(LocalDateTime.now());
         return carritoMapper.toDto(carritoRepository.save(carrito));
     }
 
     public Double calcularTotal(Long carritoId) {
         Carrito carrito = getCarritoEntityById(carritoId);
-        return carrito.getProductos().stream()
-                .mapToDouble(Producto::getPrecio)
+        return carrito.getItems().stream()
+                .mapToDouble(item -> item.getCantidad() * item.getPrecioUnitario())
                 .sum();
     }
 
     public PedidoResponseDTO pagar(Long carritoId) {
         Carrito carrito = getCarritoEntityById(carritoId);
 
-        if (carrito.getProductos().isEmpty()) {
+        if (carrito.getItems().isEmpty()) {
             throw new ArgumentInvalidException("El carrito está vacío, no se puede generar un pedido");
         }
 
         Pedido pedido = new Pedido();
         pedido.setUsuario(carrito.getUsuario());
-        pedido.setProductos(new ArrayList<>(carrito.getProductos()));
-        pedido.setPrecioTotal(calcularTotal(carritoId));
+        pedido.setItems(new ArrayList<>());
+        for (Item carritoItem : new ArrayList<>(carrito.getItems())) {
+            Item pedidoItem = new Item();
+            pedidoItem.setProducto(carritoItem.getProducto());
+            pedidoItem.setCantidad(carritoItem.getCantidad());
+            pedidoItem.setPrecioUnitario(carritoItem.getPrecioUnitario());
+            pedidoItem.setPedido(pedido);
+            pedido.getItems().add(pedidoItem);
+        }
+        pedido.setPrecioTotal(calcularTotal(carrito));
         pedido.setFechaPedido(LocalDateTime.now());
         pedido.setEstado("pendiente");
 
-        pedidoRepository.save(pedido);
+        Pedido savedPedido = pedidoRepository.save(pedido);
 
-        carrito.getProductos().clear();
+        carrito.getItems().clear();
         carrito.setFechaActualizacion(LocalDateTime.now());
         carritoRepository.save(carrito);
 
-        return pedidoMapper.toDto(pedido);
+        return pedidoMapper.toDto(savedPedido);
     }
 
     public void deleteCarrito(Long carritoId) {
@@ -155,5 +205,18 @@ public class CarritoService {
     private Carrito getCarritoEntityById(Long id) {
         return carritoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado con id: " + id));
+    }
+
+    private Item getItemEntityById(Carrito carrito, Long itemId) {
+        return carrito.getItems().stream()
+                .filter(item -> item.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("El item con id " + itemId + " no está en el carrito"));
+    }
+
+    private Double calcularTotal(Carrito carrito) {
+        return carrito.getItems().stream()
+                .mapToDouble(item -> item.getCantidad() * item.getPrecioUnitario())
+                .sum();
     }
 }
