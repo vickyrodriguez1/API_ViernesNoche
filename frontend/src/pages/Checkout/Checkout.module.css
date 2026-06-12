@@ -124,6 +124,52 @@
   letter-spacing: -0.02em;
 }
 
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.actions .payButton,
+.actions .clearButton {
+  flex: 1;
+  margin-top: 0;
+}
+
+.clearButton {
+  padding: 14px;
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.clearButton:hover {
+  border-color: var(--color-danger-dark);
+  color: var(--color-danger-dark);
+}
+
+.removeButton {
+  margin-left: 12px;
+  padding: 6px 12px;
+  background: transparent;
+  color: var(--color-danger-dark);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.removeButton:hover {
+  background-color: var(--color-danger-soft);
+}
+
 .payButton {
   width: 100%;
   margin-top: 24px;

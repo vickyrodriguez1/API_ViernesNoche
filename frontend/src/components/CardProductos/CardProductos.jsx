@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
+import { addProductToCart } from '../../store/slices/cartSlice';
 import styles from './CardProductos.module.css';
 
 const CardProductos = ({ product }) => {
@@ -11,6 +12,11 @@ const CardProductos = ({ product }) => {
 
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(product));
+  }
+
+  // Dispara el thunk que hace POST a la API para agregar este producto al carrito.
+  const handleAddToCart = () => {
+    dispatch(addProductToCart(product.id));
   }
 
   return (
@@ -69,7 +75,7 @@ const CardProductos = ({ product }) => {
             >
               {isFavorite ? '♥' : '♡'}
             </button>
-            <button className={styles.addButton}>Agregar</button>
+            <button className={styles.addButton} type="button" onClick={handleAddToCart}>Agregar</button>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import styles from './Header.module.css'
 export default function Header({ userRol, onLogout }) {
   const navigate = useNavigate()
   const favoriteCount = useSelector((state) => state.favorites.items.length)
+  const cartCount = useSelector((state) => state.cart.items.length)
 
   const handleLogout = () => {
     onLogout()
@@ -26,7 +27,7 @@ export default function Header({ userRol, onLogout }) {
           Favoritos {favoriteCount > 0 ? `(${favoriteCount})` : ''}
         </Link>
         <Link to="/checkout" className={styles.navLink}>
-          Checkout
+          Checkout {cartCount > 0 ? `(${cartCount})` : ''}
         </Link>
         {userRol === 'ADMIN' && (
           <Link to="/create-product" className={`${styles.navLink} ${styles.admin}`}>
