@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import styles from './Checkout.module.css'
 
 export default function Checkout() {
   const [carrito, setCarrito] = useState(null)
@@ -62,57 +63,52 @@ export default function Checkout() {
     }
   }
 
-  if (loading) return <p style={{ textAlign: 'center', marginTop: '40px' }}>Cargando carrito...</p>
+  if (loading) return <p className={styles.loading}>Cargando carrito...</p>
 
   return (
-    <div style={{ maxWidth: '500px', margin: '30px auto', padding: '25px', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Checkout</h2>
-
-      {error && (
-        <div style={{ color: 'red', backgroundColor: '#ffe6e6', padding: '10px', borderRadius: '4px', marginBottom: '15px', textAlign: 'center' }}>
-          {error}
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.cardHeader}>
+          <h2 className={styles.title}>Checkout</h2>
+          <p className={styles.cardHeaderSub}>Revisá tu pedido antes de confirmar</p>
         </div>
-      )}
-      {mensaje && (
-        <div style={{ color: 'green', backgroundColor: '#e6ffe6', padding: '10px', borderRadius: '4px', marginBottom: '15px', textAlign: 'center' }}>
-          {mensaje}
-        </div>
-      )}
 
-      {!carrito || carrito.productos?.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#666' }}>Tu carrito está vacío.</p>
-      ) : (
-        <>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {carrito.productos.map((p) => (
-              <li key={p.id} style={{ padding: '10px 0', borderBottom: '1px solid #eee' }}>
-                {p.nombre} — ${p.precio}
-              </li>
-            ))}
-          </ul>
-          <p style={{ fontSize: '20px', fontWeight: 'bold', marginTop: '15px' }}>
-            Total: ${carrito.total}
-          </p>
-          <button
-            type="button"
-            onClick={handlePagar}
-            disabled={pagando}
-            style={{
-              width: '100%',
-              marginTop: '15px',
-              padding: '12px',
-              background: pagando ? '#ccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              fontSize: '16px',
-              cursor: pagando ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {pagando ? 'Procesando...' : 'Confirmar compra'}
-          </button>
-        </>
-      )}
+        <div className={styles.body}>
+          {error && (
+            <div className={`${styles.alert} ${styles.alertError}`}>{error}</div>
+          )}
+          {mensaje && (
+            <div className={`${styles.alert} ${styles.alertSuccess}`}>{mensaje}</div>
+          )}
+
+          {!carrito || carrito.productos?.length === 0 ? (
+            <p className={styles.empty}>Tu carrito está vacío.</p>
+          ) : (
+            <>
+              <ul className={styles.list}>
+                {carrito.productos.map((p) => (
+                  <li key={p.id} className={styles.item}>
+                    <span>{p.nombre}</span>
+                    <span className={styles.itemPrice}>${p.precio}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>Total</span>
+                <span className={styles.totalValue}>${carrito.total}</span>
+              </div>
+              <button
+                type="button"
+                onClick={handlePagar}
+                disabled={pagando}
+                className={styles.payButton}
+              >
+                {pagando ? 'Procesando...' : 'Confirmar compra'}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

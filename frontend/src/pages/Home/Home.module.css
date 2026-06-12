@@ -1,126 +1,139 @@
 .container {
-  max-width: 800px;
-  margin: 60px auto;
-  padding: 40px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  max-width: 760px;
+  margin: 72px auto;
+  padding: 56px 48px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.5s var(--ease) both;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: var(--gradient-primary);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 18px;
 }
 
 .title {
-  font-size: 42px;
-  font-weight: 700;
-  color: #2563eb;
-  margin: 0 0 15px 0;
-  letter-spacing: -0.5px;
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: 800;
+  color: var(--color-text-strong);
+  margin: 0 0 16px 0;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.highlight {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   font-size: 18px;
-  color: #666;
-  margin: 0 0 30px 0;
-}
-
-.userInfo {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #f9fafb;
-  border-left: 4px solid #f59e0b;
-  border-radius: 6px;
-  margin-bottom: 35px;
-  font-size: 16px;
-  color: #1f2937;
-}
-
-.userInfo strong {
-  color: #f59e0b;
-  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 auto 36px;
+  max-width: 460px;
+  line-height: 1.6;
 }
 
 .buttonsContainer {
   display: flex;
-  gap: 15px;
+  gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 35px;
 }
 
 .btn {
-  padding: 12px 28px;
+  padding: 13px 28px;
   border: none;
-  border-radius: 8px;
-  color: white;
+  border-radius: var(--radius-md);
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all var(--transition);
 }
 
 .btnPrimary {
-  background-color: #2563eb;
+  background: var(--gradient-primary);
   color: white;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
 
 .btnPrimary:hover {
-  background-color: #1d4ed8;
+  background: var(--gradient-primary-hover);
+  color: white;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
-}
-
-.btnPrimary:active {
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-primary);
 }
 
 .btnSecondary {
-  background-color: #6366f1;
-  color: white;
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-xs);
 }
 
 .btnSecondary:hover {
-  background-color: #4f46e5;
+  background: var(--color-surface-muted);
+  color: var(--color-text-strong);
+  border-color: var(--color-primary);
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
-}
-
-.btnSecondary:active {
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .btnSuccess {
-  background-color: #10b981;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
 }
 
 .btnSuccess:hover {
-  background-color: #059669;
+  color: white;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.38);
 }
 
-.btnSuccess:active {
+.btn:active {
   transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
   .container {
-    margin: 30px 15px;
-    padding: 25px;
-  }
-
-  .title {
-    font-size: 28px;
+    margin: 32px 16px;
+    padding: 36px 24px;
   }
 
   .buttonsContainer {
     flex-direction: column;
-    gap: 10px;
   }
 
   .btn {
     width: 100%;
+    justify-content: center;
   }
 }

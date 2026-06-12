@@ -26,15 +26,46 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  // Estados de carga y error
-  if (loading) return <div className={styles.container}><p>Cargando productos...</p></div>;
-  if (error) return <div className={styles.container}><p>Error: {error}</p></div>;
+  // Estado de carga: skeletons animados
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <span className={styles.eyebrow}>Catálogo</span>
+          <h2 className={styles.title}>Nuestros Productos</h2>
+        </div>
+        <div className={styles.grid}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className={styles.skeletonCard}>
+              <div className={`${styles.skeletonImage} ${styles.shimmer}`} />
+              <div className={`${styles.skeletonLine} ${styles.shimmer}`} />
+              <div className={`${styles.skeletonLine} ${styles.short} ${styles.shimmer}`} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.stateMessage}>{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Nuestros Productos</h2>
+      <div className={styles.header}>
+        <span className={styles.eyebrow}>Catálogo</span>
+        <h2 className={styles.title}>Nuestros Productos</h2>
+        <p className={styles.subtitle}>
+          Descubrí nuestra selección de productos seleccionados para vos.
+        </p>
+      </div>
       {products.length === 0 ? (
-        <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>
+        <p className={styles.empty}>
           No hay productos disponibles en este momento.
         </p>
       ) : (

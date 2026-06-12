@@ -75,7 +75,8 @@ export default function LoginForm({ onLoginSuccess }) {
         <div className={styles.container}>
             <div className={styles.panel}>
                 <h2 className={styles.title}>Iniciar Sesión</h2>
-                
+                <p className={styles.subtitle}>Ingresá tus datos para continuar</p>
+
                 {/* Cartel de error mejorado */}
                 {errorMessage && (
                     <div className={styles.errorAlert}>

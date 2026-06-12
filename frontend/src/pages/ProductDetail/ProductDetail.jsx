@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import styles from './ProductDetail.module.css'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -26,26 +27,66 @@ export default function ProductDetail() {
     fetchProduct()
   }, [id])
 
-  if (loading) return <p style={{ textAlign: 'center', marginTop: '40px' }}>Cargando producto...</p>
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.stateMessage}>Cargando producto...</div>
+      </div>
+    )
+  }
+
   if (error) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '40px' }}>
-        <p>Error: {error}</p>
-        <Link to="/products">Volver a productos</Link>
+      <div className={styles.container}>
+        <div className={styles.stateMessage}>
+          <p>Error: {error}</p>
+          <Link to="/products">← Volver a productos</Link>
+        </div>
       </div>
     )
   }
 
   return (
-    <div style={{ maxWidth: '500px', margin: '30px auto', padding: '25px', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <Link to="/products" style={{ color: '#007bff' }}>← Volver</Link>
-      <h2 style={{ marginTop: '15px' }}>{product.nombre}</h2>
-      <p style={{ color: '#666' }}>{product.descripcion}</p>
-      <p style={{ fontSize: '22px', fontWeight: 'bold', color: '#28a745' }}>${product.precio}</p>
-      <p>Stock: {product.stock}</p>
-      {product.categorias?.length > 0 && (
-        <p>Categorías: {product.categorias.join(', ')}</p>
-      )}
+    <div className={styles.container}>
+      <Link to="/products" className={styles.back}>
+        ← Volver a productos
+      </Link>
+
+      <div className={styles.card}>
+        <div className={styles.imageArea}>
+          {product.imagen ? (
+            <img
+              src={product.imagen}
+              alt={product.nombre}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            'Sin imagen'
+          )}
+        </div>
+
+        <div className={styles.body}>
+          <div className={styles.titleRow}>
+            <h2 className={styles.title}>{product.nombre}</h2>
+            <span className={styles.price}>${product.precio}</span>
+          </div>
+
+          {product.descripcion && (
+            <p className={styles.description}>{product.descripcion}</p>
+          )}
+
+          <div className={styles.meta}>
+            <span className={`${styles.chip} ${styles.chipStock}`}>
+              Stock: {product.stock}
+            </span>
+            {product.categorias?.map((cat) => (
+              <span key={cat} className={styles.chip}>
+                {cat}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

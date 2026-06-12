@@ -1,98 +1,129 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;    
-    background-color: #f9fafb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background:
+    radial-gradient(900px 500px at 20% 0%, rgba(37, 99, 235, 0.12), transparent 60%),
+    radial-gradient(800px 500px at 100% 100%, rgba(79, 70, 229, 0.12), transparent 55%),
+    var(--color-bg);
 }
 
 .panel {
-    max-width: 420px;
-    width: 100%;
-    padding: 40px;
-    background-color: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin: 20px;
+  max-width: 420px;
+  width: 100%;
+  padding: 44px 40px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.45s var(--ease) both;
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: var(--gradient-primary);
 }
 
 .title {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #2563eb;
-    font-size: 28px;
-    font-weight: 600;
+  text-align: center;
+  margin: 0 0 6px;
+  color: var(--color-text-strong);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 14.5px;
+  margin: 0 0 30px;
 }
 
 .errorAlert {
-    color: #991b1b;
-    background-color: #fee2e2;
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: center;
-    border: 1px solid #fecaca;
-    font-size: 14px;
-    font-weight: 500;
+  color: var(--color-danger-dark);
+  background-color: var(--color-danger-soft);
+  padding: 13px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 22px;
+  text-align: center;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .formGroup {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .formGroupPassword {
-    margin-bottom: 28px;
+  margin-bottom: 28px;
 }
 
 .label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #1f2937;
-    font-size: 14px;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-text-strong);
+  font-size: 14px;
 }
 
 .input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    box-sizing: border-box;
-    font-size: 14px;
-    color: #1e293b;
-    background-color: #f8fafc;
-    outline: none;
-    transition: all 0.2s;
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-sizing: border-box;
+  font-size: 14.5px;
+  color: var(--color-text-strong);
+  background-color: var(--color-surface-muted);
+  outline: none;
+  transition: all var(--transition);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
 }
 
 .input:focus {
-    border-color: #2563eb;
-    background-color: white;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: var(--color-primary);
+  background-color: var(--color-surface);
+  box-shadow: 0 0 0 4px var(--color-primary-soft);
 }
 
 .button {
-    width: 100%;
-    padding: 12px;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  width: 100%;
+  padding: 13px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
 
 .button:hover:not(:disabled) {
-    background-color: #1d4ed8;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  background: var(--gradient-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .button:disabled {
-    background-color: #cbd5e1;
-    cursor: not-allowed;
-    box-shadow: none;
+  background: var(--color-border-strong);
+  cursor: not-allowed;
+  box-shadow: none;
 }

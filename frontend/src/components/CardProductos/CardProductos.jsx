@@ -63,8 +63,11 @@ const CardProductos = ({ product }) => {
               className={`${styles.favoriteButton} ${isFavorite ? styles.favorited : ''}`}
               type="button"
               onClick={handleToggleFavorite}
+              title={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+              aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+              aria-pressed={isFavorite}
             >
-              {isFavorite ? '♥ Favorito' : '♡ Favorito'}
+              {isFavorite ? '♥' : '♡'}
             </button>
             <button className={styles.addButton}>Agregar</button>
           </div>
