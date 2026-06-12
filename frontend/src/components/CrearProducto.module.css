@@ -7,10 +7,10 @@
 }
 
 .card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(160deg, #272320 0%, #1e1b18 55%, #1a1714 100%);
+  border: 1px solid rgba(249, 115, 22, 0.18);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.04);
   overflow: hidden;
 }
 
@@ -75,11 +75,11 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-strong);
   box-sizing: border-box;
   font-size: 14.5px;
   color: var(--color-text-strong);
-  background-color: var(--color-surface-muted);
+  background-color: rgba(0, 0, 0, 0.25);
   outline: none;
   transition: all var(--transition);
   font-family: inherit;
@@ -91,8 +91,8 @@
 
 .input:focus {
   border-color: var(--color-success);
-  background-color: var(--color-surface);
-  box-shadow: 0 0 0 4px var(--color-success-soft);
+  background-color: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2);
 }
 
 .textarea {

@@ -22,16 +22,16 @@
 }
 
 .card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(160deg, #272320 0%, #1e1b18 55%, #1a1714 100%);
+  border: 1px solid rgba(249, 115, 22, 0.18);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.04);
   overflow: hidden;
 }
 
 .imageArea {
   height: 280px;
-  background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 50%, #eff6ff 100%);
+  background: linear-gradient(135deg, #1a1613 0%, #201d19 60%, #1a1613 100%);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,34 +1,42 @@
 :root {
-  /* ===== Color palette ===== */
-  --color-bg: #f4f6fb;
-  --color-bg-alt: #eef1f8;
-  --color-surface: #ffffff;
-  --color-surface-muted: #f8fafc;
+  /* ===== Color palette: warm dark + modern orange ===== */
+  --color-bg: #100e0c;
+  --color-bg-alt: #181512;
+  --color-surface: #1e1b18;
+  --color-surface-muted: #181512;
 
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-primary-darker: #1e40af;
-  --color-primary-soft: rgba(37, 99, 235, 0.1);
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-  --gradient-primary-hover: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+  /* Primary = vibrant modern orange */
+  --color-primary: #f97316;
+  --color-primary-dark: #ea580c;
+  --color-primary-darker: #c2410c;
+  --color-primary-soft: rgba(249, 115, 22, 0.12);
+  --gradient-primary: linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%);
 
+  /* Ink = warm near-black (charcoal) used for navbar / dark surfaces */
+  --color-ink: #1c1917;
+  --color-ink-2: #292524;
+  --gradient-ink: linear-gradient(135deg, #2c2826 0%, #1c1917 55%, #0c0a09 100%);
+  --gradient-ink-soft: linear-gradient(160deg, #292524 0%, #1c1917 100%);
+
+  /* Accent gold reserved for ratings / stars */
   --color-accent: #f59e0b;
   --color-accent-dark: #d97706;
   --color-accent-soft: rgba(245, 158, 11, 0.12);
 
-  --color-success: #10b981;
-  --color-success-dark: #059669;
-  --color-success-soft: rgba(16, 185, 129, 0.12);
+  --color-success: #16a34a;
+  --color-success-dark: #15803d;
+  --color-success-soft: rgba(22, 163, 74, 0.12);
   --color-danger: #ef4444;
   --color-danger-dark: #dc2626;
   --color-danger-soft: rgba(239, 68, 68, 0.1);
 
-  /* Neutrals (slate scale) */
-  --color-text: #475569;
-  --color-text-strong: #0f172a;
-  --color-text-muted: #94a3b8;
-  --color-border: #e2e8f0;
-  --color-border-strong: #cbd5e1;
+  /* Neutrals (warm stone dark scale) */
+  --color-text: #b5aea7;
+  --color-text-strong: #f0ebe5;
+  --color-text-muted: #6b6560;
+  --color-border: #2e2a26;
+  --color-border-strong: #3e3a36;
 
   /* ===== Typography ===== */
   --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, -apple-system, sans-serif;
@@ -41,13 +49,14 @@
   --radius-xl: 24px;
   --radius-full: 999px;
 
-  /* ===== Shadows (soft, layered) ===== */
-  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.12), 0 4px 8px rgba(15, 23, 42, 0.06);
-  --shadow-xl: 0 24px 48px rgba(15, 23, 42, 0.16);
-  --shadow-primary: 0 8px 20px rgba(37, 99, 235, 0.28);
+  /* ===== Shadows (pure-black base for dark bg) ===== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 14px 32px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 28px 56px rgba(0, 0, 0, 0.6);
+  --shadow-primary: 0 10px 28px rgba(249, 115, 22, 0.45);
+  --shadow-ink: 0 14px 32px rgba(0, 0, 0, 0.55);
 
   /* ===== Motion ===== */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -72,8 +81,8 @@ body {
   padding: 0;
   min-height: 100vh;
   background:
-    radial-gradient(1200px 600px at 100% -10%, rgba(37, 99, 235, 0.06), transparent 60%),
-    radial-gradient(1000px 500px at -10% 0%, rgba(79, 70, 229, 0.05), transparent 55%),
+    radial-gradient(1000px 500px at 85% 0%, rgba(249, 115, 22, 0.12), transparent 55%),
+    radial-gradient(800px 400px at 5% 100%, rgba(249, 115, 22, 0.07), transparent 50%),
     var(--color-bg);
   color: var(--color-text);
 }
@@ -137,8 +146,8 @@ pre {
 
 /* Selection + focus polish */
 ::selection {
-  background: var(--color-primary-soft);
-  color: var(--color-primary-darker);
+  background: rgba(249, 115, 22, 0.3);
+  color: #f0ebe5;
 }
 
 :focus-visible {
@@ -160,10 +169,15 @@ pre {
   background: var(--color-border-strong);
   border-radius: var(--radius-full);
   border: 3px solid var(--color-bg);
+  transition: background var(--transition);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-bg);
 }
 
 /* Shared fade-in entrance */

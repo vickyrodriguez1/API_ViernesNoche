@@ -39,6 +39,13 @@ export default function Checkout() {
     }
   }, [])
 
+  // Auto-dismiss error after 4s
+  useEffect(() => {
+    if (!error) return
+    const timer = setTimeout(() => setError(null), 4000)
+    return () => clearTimeout(timer)
+  }, [error])
+
   const handlePagar = async () => {
     if (!carrito?.id) return
     setPagando(true)

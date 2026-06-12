@@ -5,12 +5,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 32px;
-  background: rgba(37, 99, 235, 0.92);
-  background-image: var(--gradient-primary);
+  padding: 16px 36px;
+  background: var(--gradient-ink);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: var(--shadow-md);
+  border-bottom: 1px solid rgba(249, 115, 22, 0.25);
+  box-shadow: var(--shadow-ink);
 }
 
 .logo {
@@ -25,15 +24,6 @@
   transition: opacity var(--transition);
 }
 
-.logo::before {
-  content: '';
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: #ffffff;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7 4V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h3a1 1 0 0 1 1 1v2a4 4 0 0 1-4 4h-.3a6 6 0 0 1-3.7 3.84V18h3a1 1 0 1 1 0 2H9a1 1 0 1 1 0-2h3v-3.16A6 6 0 0 1 8.3 11H8a4 4 0 0 1-4-4V5a1 1 0 0 1 1-1h2Zm0 2H6v1a2 2 0 0 0 1 1.73V6Zm10 0v2.73A2 2 0 0 0 18 7V6h-1Z'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7 4V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h3a1 1 0 0 1 1 1v2a4 4 0 0 1-4 4h-.3a6 6 0 0 1-3.7 3.84V18h3a1 1 0 1 1 0 2H9a1 1 0 1 1 0-2h3v-3.16A6 6 0 0 1 8.3 11H8a4 4 0 0 1-4-4V5a1 1 0 0 1 1-1h2Zm0 2H6v1a2 2 0 0 0 1 1.73V6Zm10 0v2.73A2 2 0 0 0 18 7V6h-1Z'/%3E%3C/svg%3E") center / contain no-repeat;
-}
 
 .logo:hover {
   opacity: 0.88;
@@ -47,7 +37,7 @@
 
 .navLink {
   position: relative;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.78);
   text-decoration: none;
   font-weight: 600;
   padding: 8px 16px;
@@ -58,16 +48,16 @@
 
 .navLink:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(249, 115, 22, 0.18);
 }
 
 .navLink.admin {
-  color: #bbf7d0;
+  color: #fdba74;
 }
 
 .navLink.admin:hover {
   color: #ffffff;
-  background: rgba(16, 185, 129, 0.3);
+  background: rgba(249, 115, 22, 0.28);
 }
 
 .userSection {
@@ -95,20 +85,20 @@
 }
 
 .rolLabel {
-  color: #fde68a;
-  background: rgba(245, 158, 11, 0.22);
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.2);
 }
 
 .rolLabelAdmin {
-  color: #bbf7d0;
-  background: rgba(16, 185, 129, 0.25);
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.2);
 }
 
 .logoutBtn {
   padding: 9px 18px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: var(--radius-full);
   cursor: pointer;
   font-weight: 600;
@@ -117,10 +107,10 @@
 }
 
 .logoutBtn:hover {
-  background: var(--color-danger);
-  border-color: var(--color-danger);
+  background: var(--gradient-primary);
+  border-color: transparent;
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(239, 68, 68, 0.35);
+  box-shadow: var(--shadow-primary);
 }
 
 .logoutBtn:active {

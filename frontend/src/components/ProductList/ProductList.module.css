@@ -17,8 +17,9 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-primary);
-  background: var(--color-primary-soft);
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.14);
+  border: 1px solid rgba(249, 115, 22, 0.28);
   padding: 6px 14px;
   border-radius: var(--radius-full);
   margin-bottom: 14px;
@@ -78,9 +79,9 @@
 .shimmer {
   background: linear-gradient(
     100deg,
-    var(--color-bg-alt) 30%,
-    #ffffff 50%,
-    var(--color-bg-alt) 70%
+    var(--color-surface) 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    var(--color-surface) 70%
   );
   background-size: 200% 100%;
   animation: shimmer 1.3s infinite linear;

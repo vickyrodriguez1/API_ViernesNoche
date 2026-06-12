@@ -5,8 +5,8 @@
   min-height: 100vh;
   padding: 24px;
   background:
-    radial-gradient(900px 500px at 20% 0%, rgba(37, 99, 235, 0.12), transparent 60%),
-    radial-gradient(800px 500px at 100% 100%, rgba(79, 70, 229, 0.12), transparent 55%),
+    radial-gradient(900px 500px at 20% 0%, rgba(249, 115, 22, 0.14), transparent 60%),
+    radial-gradient(800px 500px at 100% 100%, rgba(28, 25, 23, 0.1), transparent 55%),
     var(--color-bg);
 }
 
@@ -14,10 +14,10 @@
   max-width: 420px;
   width: 100%;
   padding: 44px 40px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(160deg, #272320 0%, #1e1b18 55%, #1a1714 100%);
+  border: 1px solid rgba(249, 115, 22, 0.18);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.04);
   position: relative;
   overflow: hidden;
   animation: fadeInUp 0.45s var(--ease) both;
@@ -79,11 +79,11 @@
   width: 100%;
   padding: 13px 14px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-strong);
   box-sizing: border-box;
   font-size: 14.5px;
   color: var(--color-text-strong);
-  background-color: var(--color-surface-muted);
+  background-color: rgba(0, 0, 0, 0.25);
   outline: none;
   transition: all var(--transition);
 }
@@ -94,8 +94,19 @@
 
 .input:focus {
   border-color: var(--color-primary);
-  background-color: var(--color-surface);
-  box-shadow: 0 0 0 4px var(--color-primary-soft);
+  background-color: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.18);
+}
+
+/* Override browser autofill background — can't use background-color, inset shadow lo tapa */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1a1714 inset;
+  -webkit-text-fill-color: #f0ebe5;
+  caret-color: #f0ebe5;
+  transition: background-color 9999s ease-in-out 0s;
+  border-color: var(--color-border-strong);
 }
 
 .button {

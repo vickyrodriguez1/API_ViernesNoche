@@ -7,16 +7,16 @@
 }
 
 .card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(160deg, #272320 0%, #1e1b18 55%, #1a1714 100%);
+  border: 1px solid rgba(249, 115, 22, 0.18);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.04);
   overflow: hidden;
 }
 
 .cardHeader {
   padding: 28px 32px;
-  background: var(--gradient-primary);
+  background: var(--gradient-ink);
   color: white;
 }
 
@@ -45,6 +45,17 @@
   text-align: center;
   font-size: 14px;
   font-weight: 500;
+  animation: alertIn 0.3s var(--ease), alertOut 0.8s var(--ease) 3.2s forwards;
+}
+
+@keyframes alertIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes alertOut {
+  from { opacity: 1; transform: translateY(0); max-height: 80px; margin-bottom: 18px; }
+  to   { opacity: 0; transform: translateY(-6px); max-height: 0; margin-bottom: 0; padding: 0; }
 }
 
 .alertError {
