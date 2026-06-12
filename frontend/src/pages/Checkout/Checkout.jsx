@@ -1,73 +1,41 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  fetchCart,
+  clearCart,
+  pagarCarrito,
+  removeProductFromCart,
+  limpiarMensajes,
+} from '../../store/slices/cartSlice'
 import styles from './Checkout.module.css'
 
 export default function Checkout() {
-  const [carrito, setCarrito] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [mensaje, setMensaje] = useState('')
-  const [pagando, setPagando] = useState(false)
+  const dispatch = useDispatch()
 
-  const token = localStorage.getItem('token')
-  const userId = localStorage.getItem('userId')
+  // Leemos el estado del carrito desde el store global de Redux.
+  // useSelector vuelve a renderizar el componente cada vez que estos datos cambian.
+  const items = useSelector((state) => state.cart.items)
+  const total = useSelector((state) => state.cart.total)
+  const loading = useSelector((state) => state.cart.loading)
+  const error = useSelector((state) => state.cart.error)
+  const ultimoPedido = useSelector((state) => state.cart.ultimoPedido)
 
-  const cargarCarrito = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(`http://localhost:8080/api/carritos/usuario/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (!response.ok) {
-        throw new Error('No se pudo cargar el carrito')
-      }
-      const data = await response.json()
-      setCarrito(data)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
+  // Al montar el componente, pedimos el carrito a la API (acción GET).
+  useEffect(() => {
+    dispatch(limpiarMensajes()) // limpiamos carteles viejos
+    dispatch(fetchCart())
+  }, [dispatch])
+
+  const handleEliminar = (productoId) => {
+    dispatch(removeProductFromCart(productoId)) // DELETE producto
   }
 
-  useEffect(() => {
-    if (userId) {
-      cargarCarrito()
-    } else {
-      setLoading(false)
-      setError('No hay usuario asociado a la sesión')
-    }
-  }, [])
+  const handleVaciar = () => {
+    dispatch(clearCart()) // DELETE vaciar
+  }
 
-  // Auto-dismiss error after 4s
-  useEffect(() => {
-    if (!error) return
-    const timer = setTimeout(() => setError(null), 4000)
-    return () => clearTimeout(timer)
-  }, [error])
-
-  const handlePagar = async () => {
-    if (!carrito?.id) return
-    setPagando(true)
-    setMensaje('')
-    setError(null)
-    try {
-      const response = await fetch(`http://localhost:8080/api/carritos/${carrito.id}/pagar`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Error al procesar el pago')
-      }
-      const pedido = await response.json()
-      setMensaje(`¡Pedido #${pedido.id} confirmado! Total: $${pedido.precioTotal}`)
-      cargarCarrito()
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setPagando(false)
-    }
+  const handlePagar = () => {
+    dispatch(pagarCarrito()) // POST pagar
   }
 
   if (loading) return <p className={styles.loading}>Cargando carrito...</p>
@@ -84,34 +52,51 @@ export default function Checkout() {
           {error && (
             <div className={`${styles.alert} ${styles.alertError}`}>{error}</div>
           )}
-          {mensaje && (
-            <div className={`${styles.alert} ${styles.alertSuccess}`}>{mensaje}</div>
+          {ultimoPedido && (
+            <div className={`${styles.alert} ${styles.alertSuccess}`}>
+              ¡Pedido #{ultimoPedido.id} confirmado! Total: ${ultimoPedido.precioTotal}
+            </div>
           )}
 
-          {!carrito || carrito.productos?.length === 0 ? (
+          {items.length === 0 ? (
             <p className={styles.empty}>Tu carrito está vacío.</p>
           ) : (
             <>
               <ul className={styles.list}>
-                {carrito.productos.map((p) => (
+                {items.map((p) => (
                   <li key={p.id} className={styles.item}>
                     <span>{p.nombre}</span>
                     <span className={styles.itemPrice}>${p.precio}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleEliminar(p.id)}
+                      className={styles.removeButton}
+                    >
+                      Eliminar
+                    </button>
                   </li>
                 ))}
               </ul>
               <div className={styles.totalRow}>
                 <span className={styles.totalLabel}>Total</span>
-                <span className={styles.totalValue}>${carrito.total}</span>
+                <span className={styles.totalValue}>${total}</span>
               </div>
-              <button
-                type="button"
-                onClick={handlePagar}
-                disabled={pagando}
-                className={styles.payButton}
-              >
-                {pagando ? 'Procesando...' : 'Confirmar compra'}
-              </button>
+              <div className={styles.actions}>
+                <button
+                  type="button"
+                  onClick={handleVaciar}
+                  className={styles.clearButton}
+                >
+                  Vaciar carrito
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePagar}
+                  className={styles.payButton}
+                >
+                  Confirmar compra
+                </button>
+              </div>
             </>
           )}
         </div>
