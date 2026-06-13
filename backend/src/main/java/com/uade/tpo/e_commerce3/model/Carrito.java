@@ -3,6 +3,7 @@ package com.uade.tpo.e_commerce3.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,11 +26,6 @@ public class Carrito {
     @Column(nullable = false)
     private LocalDateTime fechaActualizacion;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "productos_carrito",
-        joinColumns = @JoinColumn(name = "carrito_id"),
-        inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
-    private List<Producto> productos = new ArrayList<>();
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Item> items = new ArrayList<>();
 }

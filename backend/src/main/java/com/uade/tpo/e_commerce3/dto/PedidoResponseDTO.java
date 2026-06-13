@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class PedidoResponseDTO {
     private Long id;
     private Long usuarioId;
-    private List<ProductoListDTO> productos;
+    private List<ItemResponseDTO> items;
     private Double precioTotal;
     private LocalDateTime fechaPedido;
     private LocalDateTime fechaEntrega;
