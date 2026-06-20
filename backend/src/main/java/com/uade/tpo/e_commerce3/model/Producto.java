@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Lob; //para poner fotos usando Base64
 import lombok.Data;
 
 @Data
@@ -34,6 +35,11 @@ public class Producto {
     
     @Column(nullable = false)
     private Integer stock;
+
+    //el campo imagen
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String imagenBase64;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

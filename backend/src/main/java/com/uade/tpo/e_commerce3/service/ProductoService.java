@@ -72,6 +72,7 @@ public class ProductoService {
         producto.setDescripcion(request.getDescripcion());
         producto.setPrecio(request.getPrecio());
         producto.setStock(request.getStock());
+        producto.setImagenBase64(request.getImagenBase64());
 
         if (request.getCategoriaIds() != null && !request.getCategoriaIds().isEmpty()) {
             List<Categoria> categorias = categoriaRepository.findAllById(request.getCategoriaIds());
@@ -87,6 +88,7 @@ public class ProductoService {
         existingProducto.setDescripcion(request.getDescripcion());
         existingProducto.setPrecio(request.getPrecio());
         existingProducto.setStock(request.getStock());
+        existingProducto.setImagenBase64(request.getImagenBase64());
 
         existingProducto.getCategorias().clear();
         if (request.getCategoriaIds() != null && !request.getCategoriaIds().isEmpty()) {

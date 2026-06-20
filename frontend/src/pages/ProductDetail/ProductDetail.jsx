@@ -54,11 +54,11 @@ export default function ProductDetail() {
 
       <div className={styles.card}>
         <div className={styles.imageArea}>
-          {product.imagen ? (
+          {product.imagenBase64 ? (
             <img
-              src={product.imagen}
+              src={product.imagenBase64}
               alt={product.nombre}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+             // style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           ) : (
             'Sin imagen'

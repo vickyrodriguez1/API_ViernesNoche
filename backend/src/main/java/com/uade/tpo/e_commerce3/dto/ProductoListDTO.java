@@ -8,4 +8,5 @@ public class ProductoListDTO {
     private Long id;
     private String nombre;
     private Double precio;
+    private String imagenBase64;
 }

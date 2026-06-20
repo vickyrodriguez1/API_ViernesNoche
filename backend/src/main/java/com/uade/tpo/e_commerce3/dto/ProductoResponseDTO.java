@@ -13,4 +13,7 @@ public class ProductoResponseDTO {
     private Double precio;
     private Integer stock;
     private List<String> categorias;
+
+    // Sumamos la propiedad para enviarle la imagen al Frontend
+    private String imagenBase64;
 }

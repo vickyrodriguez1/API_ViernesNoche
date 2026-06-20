@@ -19,12 +19,18 @@ const CardProductos = ({ product }) => {
     dispatch(addProductToCart(product.id));
   }
 
+  // Creamos la variable de forma segura leyendo el array que manda el Backend
+  const categoriaDestacada = product.categorias && product.categorias.length > 0 
+    ? product.categorias[0] 
+    : null;
+
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
-        {product.imagen ? (
+        {/* CORREGIDO: Ahora tanto la condición como el src evalúan la propiedad correcta */}
+        {product.imagenBase64 ? (
           <img 
-            src={product.imagen} 
+            src={product.imagenBase64} 
             alt={product.nombre} 
             className={styles.image}
           />
@@ -33,8 +39,9 @@ const CardProductos = ({ product }) => {
             Sin imagen
           </div>
         )}
-        {product.categoria && (
-          <span className={styles.badge}>{product.categoria}</span>
+        {/* CORREGIDO: Cambiado a plural para que detecte el array del backend */}
+        {categoriaDestacada && (
+          <span className={styles.badge}>{categoriaDestacada}</span>
         )}
       </div>
       

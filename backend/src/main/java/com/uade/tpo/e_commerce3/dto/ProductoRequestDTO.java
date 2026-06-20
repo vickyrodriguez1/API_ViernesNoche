@@ -23,4 +23,7 @@ public class ProductoRequestDTO {
     private Integer stock;
 
     private List<Long> categoriaIds;
+
+    // Sumamos el campo para capturar la imagen que mandemos por Postman o React
+    private String imagenBase64;
 }

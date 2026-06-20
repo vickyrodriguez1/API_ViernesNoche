@@ -21,6 +21,7 @@ public class ProductoMapper {
         dto.setDescripcion(producto.getDescripcion());
         dto.setPrecio(producto.getPrecio());
         dto.setStock(producto.getStock());
+        dto.setImagenBase64(producto.getImagenBase64());
         
         List<String> categorias = null;
         if (producto.getCategorias() != null) {
@@ -40,6 +41,7 @@ public class ProductoMapper {
         dto.setId(producto.getId());
         dto.setNombre(producto.getNombre());
         dto.setPrecio(producto.getPrecio());
+        dto.setImagenBase64(producto.getImagenBase64());
         
         return dto;
     }
