@@ -26,6 +26,10 @@ public class Carrito {
     @Column(nullable = false)
     private LocalDateTime fechaActualizacion;
 
+    @Column(nullable = false)
+    private String estado = "ACTIVO";
+
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Item> items = new ArrayList<>();
+
 }

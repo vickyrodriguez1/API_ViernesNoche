@@ -165,7 +165,7 @@ const cartSlice = createSlice({
     // usamos esta MISMA función para guardar la respuesta en el estado y no repetir.
     const guardarCarrito = (state, action) => {
       state.carritoId = action.payload.id
-      state.items = action.payload.productos || []
+      state.items = action.payload.items || []
       state.total = action.payload.total || 0
       state.loading = false
       state.error = null
