@@ -52,12 +52,12 @@
 }
 
 .navLink.admin {
-  color: #fdba74;
-}
+  color: rgba(255, 255, 255, 0.78);
+  }
 
 .navLink.admin:hover {
   color: #ffffff;
-  background: rgba(249, 115, 22, 0.28);
+  background: rgba(249, 115, 22, 0.18);
 }
 
 .userSection {
@@ -134,4 +134,11 @@
     width: 100%;
     justify-content: center;
   }
+
+
+.active {
+  color: #ffffff !important;
+  background: rgba(249, 115, 22, 0.4) !important;
+}
+
 }

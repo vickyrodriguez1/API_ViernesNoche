@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import styles from './Header.module.css'
 
@@ -13,6 +13,10 @@ export default function Header({ userRol, onLogout }) {
     navigate('/login')
   }
 
+  // Función dinámica para los enlaces comunes
+  const getNavLinkClass = ({ isActive }) => 
+    isActive ? `${styles.navLink} ${styles.active}` : styles.navLink;
+
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo}>
@@ -20,19 +24,27 @@ export default function Header({ userRol, onLogout }) {
       </Link>
       
       <nav className={styles.nav}>
-        <Link to="/products" className={styles.navLink}>
+        <NavLink to="/products" className={getNavLinkClass}>
           Productos
-        </Link>
-        <Link to="/favorites" className={styles.navLink}>
+        </NavLink>
+        
+        <NavLink to="/favorites" className={getNavLinkClass}>
           Favoritos {favoriteCount > 0 ? `(${favoriteCount})` : ''}
-        </Link>
-        <Link to="/checkout" className={styles.navLink}>
+        </NavLink>
+        
+        <NavLink to="/checkout" className={getNavLinkClass}>
           Checkout {cartCount > 0 ? `(${cartCount})` : ''}
-        </Link>
+        </NavLink>
+        
         {userRol === 'ADMIN' && (
-          <Link to="/create-product" className={`${styles.navLink} ${styles.admin}`}>
+          <NavLink 
+            to="/create-product" 
+            className={({ isActive }) => 
+              isActive ? `${styles.navLink} ${styles.active}` : `${styles.navLink} ${styles.admin}`
+            }
+          >
             Crear producto
-          </Link>
+          </NavLink>
         )}
       </nav>
 
