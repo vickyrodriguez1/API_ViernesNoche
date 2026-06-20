@@ -6,8 +6,8 @@ import styles from './Header.module.css'
 export default function Header({ userRol, onLogout }) {
   const navigate = useNavigate()
   const favoriteCount = useSelector((state) => state.favorites.items.length)
-  const cartCount = useSelector((state) => state.cart.items.length)
-
+  const cartCount = useSelector((state) => state.cart.items.reduce((total, item) => total + item.cantidad, 0)
+  )
   const handleLogout = () => {
     onLogout()
     navigate('/login')

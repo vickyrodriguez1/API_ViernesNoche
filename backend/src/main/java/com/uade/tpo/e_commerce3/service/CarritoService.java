@@ -140,18 +140,25 @@ public class CarritoService {
         return carritoMapper.toDto(carritoRepository.save(carrito));
     }
 
-    public CarritoResponseDTO eliminarItemPorProducto(Long carritoId, Long productoId) {
-        Carrito carrito = getCarritoEntityById(carritoId);
+   public CarritoResponseDTO eliminarItemPorProducto(Long carritoId, Long productoId) {
+    Carrito carrito = getCarritoEntityById(carritoId);
 
-        boolean removed = carrito.getItems().removeIf(item -> item.getProducto().getId().equals(productoId));
+    // Buscamos el ítem que corresponde al productoId
+    Item item = carrito.getItems().stream()
+            .filter(i -> i.getProducto().getId().equals(productoId))
+            .findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("El producto con id " + productoId + " no está en el carrito"));
 
-        if (!removed) {
-            throw new ResourceNotFoundException("El producto con id " + productoId + " no está en el carrito");
-        }
-
-        carrito.setFechaActualizacion(LocalDateTime.now());
-        return carritoMapper.toDto(carritoRepository.save(carrito));
+    // Lógica: si hay más de 1, restamos 1. Si es 1, eliminamos el ítem.
+    if (item.getCantidad() > 1) {
+        item.setCantidad(item.getCantidad() - 1);
+    } else {
+        carrito.getItems().remove(item);
     }
+
+    carrito.setFechaActualizacion(LocalDateTime.now());
+    return carritoMapper.toDto(carritoRepository.save(carrito));
+}
 
     public CarritoResponseDTO vaciarCarrito(Long carritoId) {
         Carrito carrito = getCarritoEntityById(carritoId);

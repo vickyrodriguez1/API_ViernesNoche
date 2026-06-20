@@ -1,4 +1,3 @@
-// Checkout.jsx (Versión restaurada con tus estilos originales)
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart, clearCart, pagarCarrito, removeProductFromCart, limpiarMensajes } from '../../store/slices/cartSlice';
@@ -33,7 +32,8 @@ export default function Checkout() {
                 {items.map((p) => (
                   <li key={p.id} className={styles.item}>
                     <span>{p.nombreProducto} (x{p.cantidad})</span>
-                    <span className={styles.itemPrice}>${p.precio}</span>
+                    {/* El único cambio realizado es p.precioUnitario */}
+                    <span className={styles.itemPrice}>${p.precioUnitario}</span>
                     <button onClick={() => dispatch(removeProductFromCart(p.productoId))} className={styles.removeButton}>
                       Eliminar
                     </button>
