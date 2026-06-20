@@ -24,13 +24,15 @@ const CardProductos = ({ product }) => {
     ? product.categorias[0] 
     : null;
 
+    const fotoProducto = product.imagen_base64 || product.imagenBase64;
+
   return (
-    <div className={styles.card}>
+        <div className={styles.card}>
       <div className={styles.imageContainer}>
-        {/* CORREGIDO: Ahora tanto la condición como el src evalúan la propiedad correcta */}
-        {product.imagenBase64 ? (
+        {/* 2. Evaluamos y renderizamos usando la variable inteligente */}
+        {fotoProducto ? (
           <img 
-            src={product.imagenBase64} 
+            src={fotoProducto} 
             alt={product.nombre} 
             className={styles.image}
           />

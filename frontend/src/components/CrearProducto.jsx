@@ -6,9 +6,22 @@ export default function CrearProducto() {
     const [descripcion, setDescripcion] = useState('');
     const [precio, setPrecio] = useState('');
     const [stock, setStock] = useState('');
+    const [imagenBase64, setImagenBase64] = useState(''); // 👈 Estado para guardar el string de la foto
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    // Mágico convertidor de archivos a string Base64
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagenBase64(reader.result); // Guarda la conversión de la imagen
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,6 +35,7 @@ export default function CrearProducto() {
             descripcion,
             precio: parseFloat(precio),
             stock: parseInt(stock),
+            imagen_base64: imagenBase64 // 👈 Sumamos la imagen mapeada con tu base de datos
         };
 
         try {
@@ -41,10 +55,13 @@ export default function CrearProducto() {
 
             const data = await response.json();
             setMensaje(`¡Producto "${data.nombre}" creado con éxito! (ID: ${data.id})`);
+            
+            // Limpiamos todos los campos del formulario tras el éxito
             setNombre('');
             setDescripcion('');
             setPrecio('');
             setStock('');
+            setImagenBase64(''); 
         } catch (err) {
             setError(err.message);
         } finally {
@@ -120,6 +137,30 @@ export default function CrearProducto() {
                                     min="0"
                                 />
                             </div>
+                        </div>
+
+                        {/* 📸 👈 NUEVO: Campo selector de archivo para la foto */}
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Imagen del Producto</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className={styles.input}
+                                onChange={handleImageChange}
+                            />
+                            {/* Vista previa miniatura si ya seleccionaste una imagen */}
+                            {imagenBase64 && (
+                                <div style={{ marginTop: '14px', textAlign: 'center' }}>
+                                    <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '6px' }}>
+                                        Vista previa:
+                                    </p>
+                                    <img 
+                                        src={imagenBase64} 
+                                        alt="Preview" 
+                                        style={{ maxHeight: '120px', borderRadius: '8px', objectFit: 'contain', border: '1px solid rgba(255,255,255,0.1)' }} 
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         <button

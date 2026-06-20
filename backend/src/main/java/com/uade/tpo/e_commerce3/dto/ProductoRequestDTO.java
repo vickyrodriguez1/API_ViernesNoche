@@ -1,6 +1,7 @@
 package com.uade.tpo.e_commerce3.dto;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*; // Importamos todas las validaciones
 import lombok.Data;
 
@@ -25,5 +26,6 @@ public class ProductoRequestDTO {
     private List<Long> categoriaIds;
 
     // Sumamos el campo para capturar la imagen que mandemos por Postman o React
+    @JsonProperty("imagen_base64")
     private String imagenBase64;
 }

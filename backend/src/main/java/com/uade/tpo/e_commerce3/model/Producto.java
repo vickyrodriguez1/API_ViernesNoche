@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Lob; //para poner fotos usando Base64
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @Entity
@@ -38,7 +39,8 @@ public class Producto {
 
     //el campo imagen
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(name = "imagen_base64", columnDefinition = "LONGTEXT")
+    @JsonProperty("imagen_base64")
     private String imagenBase64;
 
     @ManyToMany(fetch = FetchType.LAZY)
