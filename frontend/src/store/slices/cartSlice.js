@@ -151,9 +151,19 @@ const cartSlice = createSlice({
     ultimoPedido: null, // el pedido que se generó al pagar (para el cartel de éxito)
   },
 
-  // Reducers síncronos (no llaman a la API). Solo limpiamos los carteles.
+  // Reducers síncronos (no llaman a la API).
   reducers: {
     limpiarMensajes: (state) => {
+      state.error = null
+      state.ultimoPedido = null
+    },
+    // Vacía el carrito EN EL ESTADO (no en la API). Lo usamos al cerrar sesión
+    // para que el carrito del usuario anterior no quede "pegado" al loguearse otro.
+    resetCart: (state) => {
+      state.carritoId = null
+      state.items = []
+      state.total = 0
+      state.loading = false
       state.error = null
       state.ultimoPedido = null
     },
@@ -213,6 +223,6 @@ const cartSlice = createSlice({
   },
 })
 
-export const { limpiarMensajes } = cartSlice.actions
+export const { limpiarMensajes, resetCart } = cartSlice.actions
 
 export default cartSlice.reducer

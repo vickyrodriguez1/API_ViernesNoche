@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
 import CrearProducto from './components/CrearProducto'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRouter from './components/AdminRouter'
 import AppLayout from './components/AppLayout'
+import Snackbar from './components/Snackbar/Snackbar'
+import { clearFavorites } from './store/slices/favoritesSlice'
+import { resetCart } from './store/slices/cartSlice'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Checkout from './pages/Checkout'
@@ -13,6 +17,7 @@ import Favorites from './pages/Favorites/Favorites'
 import './App.css'
 
 function App() {
+  const dispatch = useDispatch()
   // Estado de autenticacion de la app (useState). Lo respaldamos en localStorage
   // para que sobreviva a recargas de pagina (persistencia simple del login).
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -38,6 +43,10 @@ function App() {
     localStorage.removeItem('token')
     localStorage.removeItem('userRol')
     localStorage.removeItem('userId')
+    // Limpiamos el estado global del usuario anterior: favoritos (localStorage)
+    // y carrito (estado en memoria), para que NO queden pegados al loguearse otro.
+    dispatch(clearFavorites())
+    dispatch(resetCart())
     setIsLoggedIn(false)
     setUserRol(null)
   }
@@ -85,6 +94,9 @@ function App() {
           }
         />
       </Routes>
+
+      {/* Snackbar global: vive fuera de las rutas para sobrevivir a la navegacion */}
+      <Snackbar />
     </BrowserRouter>
   )
 }

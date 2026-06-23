@@ -16,7 +16,7 @@
 
 .cardHeader {
   padding: 28px 32px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: var(--gradient-primary);
   color: white;
 }
 
@@ -90,9 +90,9 @@
 }
 
 .input:focus {
-  border-color: var(--color-success);
+  border-color: var(--color-primary);
   background-color: rgba(0, 0, 0, 0.35);
-  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.18);
 }
 
 .textarea {
@@ -113,7 +113,7 @@
   width: 100%;
   margin-top: 6px;
   padding: 14px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: var(--radius-md);
@@ -121,12 +121,13 @@
   font-weight: 700;
   cursor: pointer;
   transition: all var(--transition);
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
 }
 
 .button:hover:not(:disabled) {
+  background: var(--gradient-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: var(--shadow-primary);
 }
 
 .button:active:not(:disabled) {
