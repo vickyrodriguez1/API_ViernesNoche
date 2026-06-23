@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { addProductToCart } from '../../store/slices/cartSlice';
@@ -7,15 +7,25 @@ import styles from './CardProductos.module.css';
 
 const CardProductos = ({ product }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const favorites = useSelector((state) => state.favorites.items);
   const isFavorite = favorites.some((item) => item?.id === product?.id);
+
+  // El producto esta agotado cuando el backend nos manda stock 0.
+  const sinStock = product.stock !== undefined && product.stock <= 0;
 
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(product));
   }
 
   // Dispara el thunk que hace POST a la API para agregar este producto al carrito.
+  // Si no hay sesion iniciada, mandamos al login (no se puede comprar sin loguearse).
   const handleAddToCart = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
     dispatch(addProductToCart(product.id));
   }
 
@@ -84,7 +94,14 @@ const CardProductos = ({ product }) => {
             >
               {isFavorite ? '♥' : '♡'}
             </button>
-            <button className={styles.addButton} type="button" onClick={handleAddToCart}>Agregar</button>
+            <button
+              className={styles.addButton}
+              type="button"
+              onClick={handleAddToCart}
+              disabled={sinStock}
+            >
+              {sinStock ? 'Agotado' : 'Agregar'}
+            </button>
           </div>
         </div>
       </div>

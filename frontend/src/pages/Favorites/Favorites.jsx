@@ -24,7 +24,7 @@ export default function Favorites() {
           <p className={styles.emptyText}>
             No tienes productos marcados como favoritos todavía.
           </p>
-          <Link to="/products" className={styles.emptyLink}>
+          <Link to="/" className={styles.emptyLink}>
             Ver productos
           </Link>
         </div>

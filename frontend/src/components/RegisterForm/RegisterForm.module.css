@@ -1,3 +1,4 @@
+/* Mismos estilos que LoginForm para mantener una UI/UX estandarizada */
 .container {
   display: flex;
   justify-content: center;
@@ -11,7 +12,7 @@
 }
 
 .panel {
-  max-width: 420px;
+  max-width: 460px;
   width: 100%;
   padding: 44px 40px;
   background: linear-gradient(160deg, #272320 0%, #1e1b18 55%, #1a1714 100%);
@@ -59,11 +60,21 @@
   font-weight: 500;
 }
 
+/* Fila para poner Nombre y Apellido lado a lado */
+.row {
+  display: flex;
+  gap: 14px;
+}
+
+.row .formGroup {
+  flex: 1;
+}
+
 .formGroup {
   margin-bottom: 20px;
 }
 
-.formGroupPassword {
+.formGroupLast {
   margin-bottom: 28px;
 }
 
@@ -98,7 +109,6 @@
   box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.18);
 }
 
-/* Override browser autofill background — can't use background-color, inset shadow lo tapa */
 .input:-webkit-autofill,
 .input:-webkit-autofill:hover,
 .input:-webkit-autofill:focus {
@@ -120,7 +130,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: all var(--transition);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
 }
 
 .button:hover:not(:disabled) {
@@ -149,4 +159,11 @@
 .switchLink {
   font-weight: 700;
   color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .row {
+    flex-direction: column;
+    gap: 0;
+  }
 }

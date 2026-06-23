@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm({ onLoginSuccess }) {
@@ -120,6 +120,10 @@ export default function LoginForm({ onLoginSuccess }) {
                         {loading ? 'Validando...' : 'Ingresar'}
                     </button>
                 </form>
+
+                <p className={styles.switchText}>
+                    ¿No tenés cuenta? <Link to="/register" className={styles.switchLink}>Registrate</Link>
+                </p>
             </div>
         </div>
     );

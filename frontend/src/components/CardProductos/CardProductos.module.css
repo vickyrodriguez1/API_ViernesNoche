@@ -234,3 +234,11 @@
 .addButton:active {
   transform: translateY(0);
 }
+
+.addButton:disabled {
+  background: var(--color-border-strong);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

@@ -1,30 +1,14 @@
-.container {
-  max-width: 820px;
-  margin: 72px auto;
-  padding: 72px 56px;
-  background: linear-gradient(160deg, #272320 0%, #1e1b18 55%, #1a1714 100%);
-  border: 1px solid rgba(249, 115, 22, 0.2);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.04);
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 0 24px;
+  animation: fadeInUp 0.45s var(--ease) both;
+}
+
+.hero {
   text-align: center;
-  position: relative;
-  overflow: hidden;
-  animation: fadeInUp 0.5s var(--ease) both;
-}
-
-.container::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(600px 320px at 85% -10%, rgba(249, 115, 22, 0.28), transparent 60%),
-    radial-gradient(500px 300px at 10% 120%, rgba(249, 115, 22, 0.16), transparent 55%);
-  pointer-events: none;
-}
-
-.container > * {
-  position: relative;
-  z-index: 1;
+  padding: 48px 24px 24px;
 }
 
 .eyebrow {
@@ -32,22 +16,22 @@
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   color: #fdba74;
-  background: rgba(249, 115, 22, 0.16);
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: rgba(249, 115, 22, 0.14);
+  border: 1px solid rgba(249, 115, 22, 0.28);
   padding: 6px 14px;
   border-radius: var(--radius-full);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .title {
-  font-size: clamp(34px, 6vw, 52px);
+  font-size: clamp(30px, 5vw, 44px);
   font-weight: 800;
-  color: #ffffff;
-  margin: 0 0 16px 0;
+  color: var(--color-text-strong);
+  margin: 0 0 12px;
   letter-spacing: -0.03em;
-  line-height: 1.08;
+  line-height: 1.1;
 }
 
 .highlight {
@@ -58,89 +42,63 @@
 }
 
 .subtitle {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0 auto 38px;
+  font-size: 17px;
+  color: var(--color-text);
+  margin: 0 auto;
   max-width: 480px;
-  line-height: 1.6;
 }
 
-.buttonsContainer {
+/* Seccion de categorias */
+.categoriesSection {
+  padding: 12px 32px 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-strong);
+  margin: 0 0 14px;
+}
+
+.chips {
   display: flex;
-  gap: 14px;
-  justify-content: center;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
-.btn {
-  padding: 13px 28px;
-  border: none;
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.chip {
+  padding: 9px 18px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   transition: all var(--transition);
 }
 
-.btnPrimary {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
-}
-
-.btnPrimary:hover {
-  background: var(--gradient-primary-hover);
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-primary);
-}
-
-.btnSecondary {
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(4px);
-}
-
-.btnSecondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+.chip:hover {
   border-color: var(--color-primary);
-  transform: translateY(-3px);
+  color: var(--color-text-strong);
 }
 
-.btnSuccess {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-}
-
-.btnSuccess:hover {
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.38);
-}
-
-.btn:active {
-  transform: translateY(-1px);
+.chipActive {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
 }
 
 @media (max-width: 768px) {
-  .container {
-    margin: 32px 16px;
-    padding: 36px 24px;
+  .categoriesSection {
+    padding: 12px 16px 0;
   }
 
-  .buttonsContainer {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
+  .hero {
+    padding: 32px 16px 16px;
   }
 }

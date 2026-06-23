@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import CardProductos from '../CardProductos';
 import styles from './ProductList.module.css';
 
-const ProductList = () => {
+// Componente reutilizable del listado de productos.
+// Recibe por props la categoria seleccionada en la Home (prop "categoria").
+// El backend ya devuelve los productos ordenados alfabeticamente.
+const ProductList = ({ categoria = '' }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [search, setSearch] = useState(''); // texto del buscador (filtrado por nombre)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -16,7 +20,7 @@ const ProductList = () => {
         }
         const data = await response.json();
         setProducts(data);
-      } catch (err) {        
+      } catch (err) {
         setError('No pudimos conectar con el servidor. Por favor, intenta más tarde.');
       } finally {
         setLoading(false);
@@ -26,14 +30,21 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
+  // Filtramos en el cliente por texto (nombre) y por la categoria que llega por props.
+  const filteredProducts = products.filter((product) => {
+    const coincideNombre = product.nombre
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const coincideCategoria =
+      categoria === '' ||
+      (product.categorias && product.categorias.includes(categoria));
+    return coincideNombre && coincideCategoria;
+  });
+
   // Estado de carga: skeletons animados
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          <span className={styles.eyebrow}>Catálogo</span>
-          <h2 className={styles.title}>Nuestros Productos</h2>
-        </div>
         <div className={styles.grid}>
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className={styles.skeletonCard}>
@@ -57,20 +68,24 @@ const ProductList = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <span className={styles.eyebrow}>Catálogo</span>
-        <h2 className={styles.title}>Nuestros Productos</h2>
-        <p className={styles.subtitle}>
-          Descubrí nuestra selección de productos seleccionados para vos.
-        </p>
+      <div className={styles.toolbar}>
+        <h2 className={styles.title}>Productos</h2>
+        <input
+          type="text"
+          className={styles.search}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar producto por nombre..."
+        />
       </div>
-      {products.length === 0 ? (
+
+      {filteredProducts.length === 0 ? (
         <p className={styles.empty}>
-          No hay productos disponibles en este momento.
+          No hay productos que coincidan con tu búsqueda.
         </p>
       ) : (
         <div className={styles.grid}>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <CardProductos key={product.id} product={product} />
           ))}
         </div>

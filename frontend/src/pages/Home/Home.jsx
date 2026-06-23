@@ -1,32 +1,69 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import ProductList from '../../components/ProductList'
 import styles from './Home.module.css'
 
-export default function Home({ userRol }) {
+// Home del sitio (lo primero que se ve, como cualquier e-commerce).
+// Muestra las DOS secciones que pide la consigna:
+//   1) el listado de categorias (las trae de la API)
+//   2) el listado de productos ordenados alfabeticamente (componente ProductList)
+// Al tocar una categoria, se filtra el listado de productos (estado selectedCategoria).
+export default function Home() {
+  const [categorias, setCategorias] = useState([])
+  const [selectedCategoria, setSelectedCategoria] = useState('') // '' = mostrar todas
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/categorias')
+        if (!res.ok) throw new Error('No se pudieron cargar las categorías')
+        const data = await res.json()
+        setCategorias(data)
+      } catch {
+        setCategorias([]) // si falla, simplemente no mostramos chips de categorias
+      }
+    }
+    fetchCategorias()
+  }, [])
+
   return (
-    <div className={styles.container}>
-      <span className={styles.eyebrow}>Bienvenido</span>
-      <h1 className={styles.title}>
-        Tu tienda <span className={styles.highlight}>E-Commerce</span>
-      </h1>
+    <div className={styles.page}>
+      <header className={styles.hero}>
+        <span className={styles.eyebrow}>Catálogo</span>
+        <h1 className={styles.title}>
+          Tu tienda <span className={styles.highlight}>E-Commerce</span>
+        </h1>
+        <p className={styles.subtitle}>
+          Explorá los productos por categoría y agregá lo que quieras a tu carrito.
+        </p>
+      </header>
 
-      <p className={styles.subtitle}>
-        Explorá nuestros productos y gestioná tu carrito de compras en un solo lugar.
-      </p>
+      <section className={styles.categoriesSection}>
+        <h2 className={styles.sectionTitle}>Categorías</h2>
+        <div className={styles.chips}>
+          {/* Chip "Todas" para limpiar el filtro */}
+          <button
+            type="button"
+            className={`${styles.chip} ${selectedCategoria === '' ? styles.chipActive : ''}`}
+            onClick={() => setSelectedCategoria('')}
+          >
+            Todas
+          </button>
 
-      <div className={styles.buttonsContainer}>
-        <Link to="/products" className={`${styles.btn} ${styles.btnPrimary}`}>
-          Ver productos
-        </Link>
-        <Link to="/checkout" className={`${styles.btn} ${styles.btnSecondary}`}>
-          Ir al checkout
-        </Link>
-        {userRol === 'ADMIN' && (
-          <Link to="/create-product" className={`${styles.btn} ${styles.btnSuccess}`}>
-            ＋ Crear producto
-          </Link>
-        )}
-      </div>
+          {categorias.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              className={`${styles.chip} ${selectedCategoria === cat.nombre ? styles.chipActive : ''}`}
+              onClick={() => setSelectedCategoria(cat.nombre)}
+            >
+              {cat.nombre}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Reutilizamos el componente de listado pasandole la categoria elegida */}
+      <ProductList categoria={selectedCategoria} />
     </div>
   )
 }

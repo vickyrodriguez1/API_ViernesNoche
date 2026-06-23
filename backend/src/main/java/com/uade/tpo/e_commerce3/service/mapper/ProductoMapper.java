@@ -41,8 +41,17 @@ public class ProductoMapper {
         dto.setId(producto.getId());
         dto.setNombre(producto.getNombre());
         dto.setPrecio(producto.getPrecio());
+        dto.setStock(producto.getStock());
         dto.setImagenBase64(producto.getImagenBase64());
-        
+
+        List<String> categorias = null;
+        if (producto.getCategorias() != null) {
+            categorias = producto.getCategorias().stream()
+                    .map(c -> c.getNombre())
+                    .collect(Collectors.toList());
+        }
+        dto.setCategorias(categorias);
+
         return dto;
     }
 }
