@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addProductToCart } from '../../store/slices/cartSlice'
+import ConfirmModal from '../../components/ConfirmModal'
 import styles from './ProductDetail.module.css'
 
 // Detalle del producto. Recibe por props si hay sesion (isLoggedIn) y el rol (userRol).
@@ -16,6 +17,7 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
   const [error, setError] = useState(null)
   const [mensaje, setMensaje] = useState('') // cartel de feedback (agregado, stock, etc.)
   const [nuevoStock, setNuevoStock] = useState('') // input de stock del panel admin
+  const [confirmOpen, setConfirmOpen] = useState(false) // modal de confirmar borrado
 
   // Traemos el producto por id cada vez que cambia el :id de la URL
   useEffect(() => {
@@ -107,9 +109,9 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
   }
 
   // ---- Admin: eliminar producto (DELETE /api/productos/:id) ----
-  const handleDelete = async () => {
-    const ok = window.confirm('¿Seguro que querés eliminar este producto?')
-    if (!ok) return
+  // El click solo abre el modal; el borrado real ocurre al confirmar.
+  const confirmarEliminar = async () => {
+    setConfirmOpen(false)
     const token = localStorage.getItem('token')
     try {
       const res = await fetch(`http://localhost:8080/api/productos/${product.id}`, {
@@ -209,13 +211,29 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
                   Actualizar stock
                 </button>
               </form>
-              <button type="button" className={styles.deleteButton} onClick={handleDelete}>
+              <button
+                type="button"
+                className={styles.deleteButton}
+                onClick={() => setConfirmOpen(true)}
+              >
                 Eliminar producto
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* Modal de confirmacion (reemplaza al window.confirm nativo) */}
+      <ConfirmModal
+        open={confirmOpen}
+        title="Eliminar producto"
+        message={`¿Seguro que querés eliminar "${product.nombre}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        variant="danger"
+        onConfirm={confirmarEliminar}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   )
 }
