@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../../store/slices/uiSlice';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm({ onLoginSuccess }) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     // 1. Estados para guardar los datos de entrada y errores
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -57,11 +60,12 @@ export default function LoginForm({ onLoginSuccess }) {
             localStorage.setItem('userRol', userData.rol);
             localStorage.setItem('userId', userData.id);
 
-            alert('¡Inicio de sesión correcto!');
-
             if (onLoginSuccess) {
                 onLoginSuccess(userData.rol);
             }
+            // Cartel breve de exito (se cierra solo). Se dispara antes de navegar:
+            // como el snackbar es global, sigue visible aunque cambiemos de ruta.
+            dispatch(showSnackbar({ message: '¡Sesión iniciada con éxito!', type: 'success' }));
             navigate('/');
 
         } catch (error) {
@@ -120,6 +124,10 @@ export default function LoginForm({ onLoginSuccess }) {
                         {loading ? 'Validando...' : 'Ingresar'}
                     </button>
                 </form>
+
+                <p className={styles.switchText}>
+                    ¿No tenés cuenta? <Link to="/register" className={styles.switchLink}>Registrate</Link>
+                </p>
             </div>
         </div>
     );

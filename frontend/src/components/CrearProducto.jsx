@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CrearProducto.module.css';
 
 export default function CrearProducto() {
@@ -7,9 +7,31 @@ export default function CrearProducto() {
     const [precio, setPrecio] = useState('');
     const [stock, setStock] = useState('');
     const [imagenBase64, setImagenBase64] = useState(''); // 👈 Estado para guardar el string de la foto
+    const [categorias, setCategorias] = useState([]); // catalogo de categorias traido de la API
+    const [categoriaIds, setCategoriaIds] = useState([]); // ids de las categorias tildadas
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    // Traemos las categorias disponibles para mostrarlas como checkboxes
+    useEffect(() => {
+        const fetchCategorias = async () => {
+            try {
+                const res = await fetch('http://localhost:8080/api/categorias');
+                if (res.ok) setCategorias(await res.json());
+            } catch {
+                /* si falla, el formulario igual sirve sin categorias */
+            }
+        };
+        fetchCategorias();
+    }, []);
+
+    // Marca/desmarca una categoria en el array de seleccionadas
+    const toggleCategoria = (id) => {
+        setCategoriaIds((prev) =>
+            prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+        );
+    };
 
     // Mágico convertidor de archivos a string Base64
     const handleImageChange = (e) => {
@@ -35,6 +57,7 @@ export default function CrearProducto() {
             descripcion,
             precio: parseFloat(precio),
             stock: parseInt(stock),
+            categoriaIds, // 👈 categorias seleccionadas 
             imagen_base64: imagenBase64 // 👈 Sumamos la imagen mapeada con tu base de datos
         };
 
@@ -61,7 +84,8 @@ export default function CrearProducto() {
             setDescripcion('');
             setPrecio('');
             setStock('');
-            setImagenBase64(''); 
+            setImagenBase64('');
+            setCategoriaIds([]);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -137,6 +161,27 @@ export default function CrearProducto() {
                                     min="0"
                                 />
                             </div>
+                        </div>
+
+                        {/* Selector de categorias (checkboxes): un producto puede tener varias */}
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Categorías</label>
+                            {categorias.length === 0 ? (
+                                <p className={styles.hint}>No hay categorías disponibles.</p>
+                            ) : (
+                                <div className={styles.categoriasGrid}>
+                                    {categorias.map((cat) => (
+                                        <label key={cat.id} className={styles.checkboxLabel}>
+                                            <input
+                                                type="checkbox"
+                                                checked={categoriaIds.includes(cat.id)}
+                                                onChange={() => toggleCategoria(cat.id)}
+                                            />
+                                            {cat.nombre}
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* 📸 👈 NUEVO: Campo selector de archivo para la foto */}

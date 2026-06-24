@@ -138,3 +138,15 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+.switchText {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.switchLink {
+  font-weight: 700;
+  color: var(--color-primary);
+}

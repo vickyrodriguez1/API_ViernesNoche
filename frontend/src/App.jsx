@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import LoginForm from './components/LoginForm'
-import ProductList from './components/ProductList'
+import RegisterForm from './components/RegisterForm'
 import CrearProducto from './components/CrearProducto'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRouter from './components/AdminRouter'
 import AppLayout from './components/AppLayout'
+import Snackbar from './components/Snackbar/Snackbar'
+import { clearFavorites } from './store/slices/favoritesSlice'
+import { resetCart } from './store/slices/cartSlice'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Checkout from './pages/Checkout'
@@ -13,6 +17,9 @@ import Favorites from './pages/Favorites/Favorites'
 import './App.css'
 
 function App() {
+  const dispatch = useDispatch()
+  // Estado de autenticacion de la app (useState). Lo respaldamos en localStorage
+  // para que sobreviva a recargas de pagina (persistencia simple del login).
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userRol, setUserRol] = useState(null)
   const [authReady, setAuthReady] = useState(false)
@@ -36,6 +43,10 @@ function App() {
     localStorage.removeItem('token')
     localStorage.removeItem('userRol')
     localStorage.removeItem('userId')
+    // Limpiamos el estado global del usuario anterior: favoritos (localStorage)
+    // y carrito (estado en memoria), para que NO queden pegados al loguearse otro.
+    dispatch(clearFavorites())
+    dispatch(resetCart())
     setIsLoggedIn(false)
     setUserRol(null)
   }
@@ -43,37 +54,35 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Paginas de autenticacion (publicas, sin navbar).
+            Si el usuario YA esta logueado, lo mandamos a la home. */}
         <Route
           path="/login"
-          element={
-            !authReady ? (
-              <p style={{ textAlign: 'center', marginTop: '40px' }}>Cargando...</p>
-            ) : isLoggedIn ? (
-              <Navigate to="/" replace />
-            ) : (
-              <LoginForm onLoginSuccess={handleLoginSuccess} />
-            )
-          }
+          element={isLoggedIn ? <Navigate to="/" replace /> : <LoginForm onLoginSuccess={handleLoginSuccess} />}
+        />
+        <Route
+          path="/register"
+          element={isLoggedIn ? <Navigate to="/" replace /> : <RegisterForm />}
         />
 
+        {/* TODO el sitio requiere estar logueado (consigna: la home se ve
+            recien una vez autenticado). ProtectedRoute redirige al login si no hay sesion. */}
         <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} authReady={authReady} />}>
-          <Route element={<AppLayout userRol={userRol} onLogout={handleLogout} />}>
-            <Route path="/" element={<Home userRol={userRol} />} />
-            <Route path="/products" element={<ProductList />} />
+          <Route element={<AppLayout isLoggedIn={isLoggedIn} userRol={userRol} onLogout={handleLogout} />}>
+            {/* La home ES el catalogo (productos + categorias) */}
+            <Route path="/" element={<Home />} />
+            <Route path="/products/:id" element={<ProductDetail isLoggedIn={isLoggedIn} userRol={userRol} />} />
             <Route path="/favorites" element={<Favorites />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route
-              path="/create-product"
-              element={
-                <AdminRouter>
-                  <CrearProducto />
-                </AdminRouter>
-              }
-            />
+
+            {/* Solo ADMIN */}
+            <Route element={<AdminRouter isLoggedIn={isLoggedIn} userRol={userRol} authReady={authReady} />}>
+              <Route path="/create-product" element={<CrearProducto />} />
+            </Route>
           </Route>
         </Route>
 
+        {/* Cualquier ruta desconocida: a la home si hay sesion, sino al login */}
         <Route
           path="*"
           element={
@@ -85,6 +94,9 @@ function App() {
           }
         />
       </Routes>
+
+      {/* Snackbar global: vive fuera de las rutas para sobrevivir a la navegacion */}
+      <Snackbar />
     </BrowserRouter>
   )
 }

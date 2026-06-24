@@ -4,12 +4,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import favoritesReducer from './slices/favoritesSlice'
 import cartReducer from './slices/cartSlice'
+import uiReducer from './slices/uiSlice'
 
 // Cada clave es un "pedazo" del estado global de la app.
 const store = configureStore({
   reducer: {
-    favorites: favoritesReducer, // estado de favoritos (ya existía, sin cambios)
-    cart: cartReducer, // estado del carrito (nuevo, con llamadas a la API)
+    favorites: favoritesReducer, // estado de favoritos
+    cart: cartReducer, // estado del carrito (con llamadas a la API)
+    ui: uiReducer, // estado de UI: el snackbar global
   },
 })
 

@@ -46,6 +46,12 @@ public class ProductoService {
             productos = productos.stream()
                     .sorted((a, b) -> Double.compare(a.getPrecio(), b.getPrecio()))
                     .collect(Collectors.toList());
+        } else {
+            // Por defecto (sin "orden" o con orden invalido) ordenamos alfabeticamente
+            // por nombre, tal como pide la consigna para la home del sitio.
+            productos = productos.stream()
+                    .sorted((a, b) -> a.getNombre().compareToIgnoreCase(b.getNombre()))
+                    .collect(Collectors.toList());
         }
 
         return productos.stream()

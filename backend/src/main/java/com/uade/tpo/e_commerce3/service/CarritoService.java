@@ -181,6 +181,18 @@ public class CarritoService {
             throw new ArgumentInvalidException("El carrito está vacío, no se puede generar un pedido");
         }
 
+        // 1) Antes de generar el pedido validamos que TODOS los productos tengan
+        //    stock suficiente. Si alguno no alcanza, cortamos y no se descuenta nada.
+        for (Item carritoItem : carrito.getItems()) {
+            Producto producto = carritoItem.getProducto();
+            if (producto.getStock() < carritoItem.getCantidad()) {
+                throw new ArgumentInvalidException(
+                        "No hay stock suficiente para el producto: " + producto.getNombre()
+                        + " (disponible: " + producto.getStock()
+                        + ", solicitado: " + carritoItem.getCantidad() + ")");
+            }
+        }
+
         Pedido pedido = new Pedido();
         pedido.setUsuario(carrito.getUsuario());
         pedido.setItems(new ArrayList<>());
@@ -191,6 +203,11 @@ public class CarritoService {
             pedidoItem.setPrecioUnitario(carritoItem.getPrecioUnitario());
             pedidoItem.setPedido(pedido);
             pedido.getItems().add(pedidoItem);
+
+            // 2) Descontamos el stock del producto (checkout sin pago real).
+            Producto producto = carritoItem.getProducto();
+            producto.setStock(producto.getStock() - carritoItem.getCantidad());
+            productoRepository.save(producto);
         }
         pedido.setPrecioTotal(calcularTotal(carrito));
         pedido.setFechaPedido(LocalDateTime.now());

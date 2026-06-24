@@ -1,12 +1,18 @@
-import { Routes, Route } from 'react-router-dom'
-import CrearProducto from './CrearProducto'
+import { Navigate, Outlet } from 'react-router-dom'
 
-export default function AdminRouter() {
-  return (
-    <Routes>
-      <Route index element={<CrearProducto />} />
-      <Route path="usuarios" element={<h1>Usuarios</h1>} />
-      <Route path="usuarios/:id" element={<h1>Usuario ID</h1>} />
-    </Routes>
-  )
+// Ruta protegida SOLO para administradores (rutas anidadas via <Outlet />).
+// - Mientras leemos el localStorage mostramos "Cargando..." para no parpadear.
+// - Si no hay sesion -> al login.
+// - Si hay sesion pero el rol no es ADMIN -> a la home.
+export default function AdminRouter({ isLoggedIn, userRol, authReady }) {
+  if (!authReady) {
+    return <p style={{ textAlign: 'center', marginTop: '40px' }}>Cargando...</p>
+  }
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />
+  }
+  if (userRol !== 'ADMIN') {
+    return <Navigate to="/" replace />
+  }
+  return <Outlet />
 }

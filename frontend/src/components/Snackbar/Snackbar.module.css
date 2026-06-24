@@ -1,0 +1,80 @@
+.snackbar {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  min-width: 240px;
+  max-width: 90vw;
+  background: linear-gradient(160deg, #272320 0%, #1e1b18 55%, #1a1714 100%);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  color: var(--color-text-strong);
+  font-weight: 600;
+  font-size: 14.5px;
+  /* Entra desde abajo y se va con un fade (mismo timing que el resto de la app) */
+  animation: snackIn 0.3s var(--ease) both, snackOut 0.4s var(--ease) 2.1s forwards;
+  transform: translate(-50%, 0);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.message {
+  line-height: 1.3;
+}
+
+/* Éxito: acento naranja de la marca (mismo look que el resto de la app) */
+.success {
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.success .icon {
+  background: var(--gradient-primary);
+  color: #ffffff;
+}
+
+/* Error: rojo */
+.error {
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+.error .icon {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+@keyframes snackIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes snackOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+}
