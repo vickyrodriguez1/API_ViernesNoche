@@ -5,6 +5,11 @@ import styles from './Header.module.css'
 
 // Barra de navegacion. Solo se muestra cuando hay sesion iniciada
 // (cuelga de las rutas protegidas), por eso siempre pinta la seccion de usuario.
+//
+// userRol y onLogout llegan por PROPS desde AppLayout, que a su vez los recibe de
+// App.jsx. El origen real del rol es App: lo lee del localStorage al iniciar sesion
+// (cadena: App -> AppLayout -> Header). El Header solo lo usa para mostrar el rol y
+// decidir si muestra el link "Crear producto".
 export default function Header({ userRol, onLogout }) {
   const navigate = useNavigate()
   // Contadores que leemos del store global (Redux): favoritos y unidades en el carrito.
@@ -25,7 +30,7 @@ export default function Header({ userRol, onLogout }) {
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo}>
-        E-Commerce
+        Defiant
       </Link>
 
       <nav className={styles.nav}>

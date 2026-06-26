@@ -33,7 +33,7 @@ export default function CrearProducto() {
         );
     };
 
-    // Mágico convertidor de archivos a string Base64
+    // convertidor de archivos a string Base64
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -184,7 +184,7 @@ export default function CrearProducto() {
                             )}
                         </div>
 
-                        {/* 📸 👈 NUEVO: Campo selector de archivo para la foto */}
+                        {/* 📸 Campo selector de archivo para la foto */}
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Imagen del Producto</label>
                             <input

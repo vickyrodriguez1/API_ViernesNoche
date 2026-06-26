@@ -13,6 +13,7 @@ import com.uade.tpo.e_commerce3.exception.ResourceNotFoundException;
 import com.uade.tpo.e_commerce3.model.Categoria;
 import com.uade.tpo.e_commerce3.model.Producto;
 import com.uade.tpo.e_commerce3.repository.CategoriaRepository;
+import com.uade.tpo.e_commerce3.repository.ItemRepository;
 import com.uade.tpo.e_commerce3.repository.ProductoRepository;
 import com.uade.tpo.e_commerce3.service.mapper.ProductoMapper;
 
@@ -27,6 +28,9 @@ public class ProductoService {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Autowired
     private ProductoMapper productoMapper;
@@ -69,7 +73,18 @@ public class ProductoService {
     }
 
     public void deleteProductoById(Long id) {
-        productoRepository.deleteById(id);
+        // Si no existe, 404 (en vez del 500 que tiraba deleteById con id inexistente).
+        Producto producto = getProductoEntityById(id);
+
+        // El producto puede estar referenciado por items de carritos o pedidos
+        // (foreign key items.producto_id). Quitamos esas referencias antes de
+        // borrar para no violar la restriccion de integridad.
+        itemRepository.deleteByProductoId(id);
+
+        // Desasociamos las categorias (tabla intermedia productos_categorias).
+        producto.getCategorias().clear();
+
+        productoRepository.delete(producto);
     }
 
     public ProductoResponseDTO saveProducto(ProductoRequestDTO request) {

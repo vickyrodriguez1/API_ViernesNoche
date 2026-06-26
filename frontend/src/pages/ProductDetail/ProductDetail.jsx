@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addProductToCart } from '../../store/slices/cartSlice'
+import { showSnackbar } from '../../store/slices/uiSlice'
 import ConfirmModal from '../../components/ConfirmModal'
 import styles from './ProductDetail.module.css'
 
-// Detalle del producto. Recibe por props si hay sesion (isLoggedIn) y el rol (userRol).
+// Detalle del producto. Recibe por props (desde App.jsx) si hay sesion (isLoggedIn)
+// y el rol (userRol), que usa para mostrar o no el panel de administracion.
 export default function ProductDetail({ isLoggedIn, userRol }) {
-  const { id } = useParams() // id del producto desde la URL (/products/:id)
+  const { id } = useParams() // useParams lee el :id de la URL (/products/:id)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -15,7 +17,6 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
   const [categorias, setCategorias] = useState([]) // catalogo de categorias (para el PUT del admin)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [mensaje, setMensaje] = useState('') // cartel de feedback (agregado, stock, etc.)
   const [nuevoStock, setNuevoStock] = useState('') // input de stock del panel admin
   const [confirmOpen, setConfirmOpen] = useState(false) // modal de confirmar borrado
 
@@ -37,7 +38,7 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
       }
     }
     fetchProduct()
-  }, [id])
+  }, [id]) // dependencia [id]: si navegas a otro producto, se vuelve a ejecutar el fetch
 
   // Traemos las categorias una sola vez (las necesita el admin para no perderlas al editar)
   useEffect(() => {
@@ -63,10 +64,11 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
       return
     }
     try {
+      // .unwrap() hace que, si el thunk falla (rejected), lance el error y caiga al catch.
       await dispatch(addProductToCart(product.id)).unwrap()
-      setMensaje('Producto agregado al carrito ✓')
+      dispatch(showSnackbar({ message: 'Producto agregado al carrito', type: 'success' }))
     } catch {
-      setMensaje('No se pudo agregar al carrito.')
+      dispatch(showSnackbar({ message: 'No se pudo agregar al carrito.', type: 'error' }))
     }
   }
 
@@ -79,8 +81,10 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
   }
 
   // ---- Admin: actualizar stock (PUT /api/productos/:id) ----
+  // PUT = modificar un recurso existente. Mandamos el token en el header porque es
+  // una accion protegida (el backend exige rol ADMIN).
   const handleUpdateStock = async (e) => {
-    e.preventDefault()
+    e.preventDefault() // evita que el form recargue la pagina
     const token = localStorage.getItem('token')
     const body = {
       nombre: product.nombre,
@@ -102,9 +106,9 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
       }
       const actualizado = await res.json()
       setProduct(actualizado)
-      setMensaje('Stock actualizado ✓')
+      dispatch(showSnackbar({ message: 'Stock actualizado', type: 'success' }))
     } catch (err) {
-      setMensaje(err.message)
+      dispatch(showSnackbar({ message: err.message, type: 'error' }))
     }
   }
 
@@ -118,13 +122,24 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })
-      if (!res.ok) throw new Error('No se pudo eliminar el producto')
+      if (!res.ok) {
+        // Intentamos leer el mensaje que manda el backend (ej. 409 por integridad).
+        let msg = 'No se pudo eliminar el producto'
+        try {
+          const errData = await res.json()
+          msg = errData.message || msg
+        } catch { /* la respuesta puede no traer body */ }
+        throw new Error(msg)
+      }
+      dispatch(showSnackbar({ message: 'Producto eliminado', type: 'success' }))
       navigate('/') // volvemos al catalogo
     } catch (err) {
-      setMensaje(err.message)
+      dispatch(showSnackbar({ message: err.message, type: 'error' }))
     }
   }
 
+  // Renderizado condicional por estado: primero "cargando", si falla "error", y si
+  // todo OK, recien se pinta el detalle (mas abajo).
   if (loading) {
     return (
       <div className={styles.container}>
@@ -178,8 +193,8 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
             ))}
           </div>
 
-          {/* Cartel de feedback (renderizado condicional) */}
-          {mensaje && <div className={styles.alert}>{mensaje}</div>}
+          {/* El feedback (éxito/error) se muestra con el Snackbar global, que se
+              cierra solo y usa rojo para errores; así queda estandarizado con el resto. */}
 
           {/* Accion de compra: si no hay stock, no se puede agregar */}
           <div className={styles.actions}>
@@ -194,7 +209,8 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
             )}
           </div>
 
-          {/* Panel SOLO para administradores: gestionar stock y eliminar */}
+          {/* Renderizado condicional por rol: este panel se muestra SOLO si userRol
+              es ADMIN. Igual, la seguridad real la hace el backend (defensa en profundidad). */}
           {userRol === 'ADMIN' && (
             <div className={styles.adminPanel}>
               <h3 className={styles.adminTitle}>Gestión (Admin)</h3>
@@ -223,7 +239,6 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
         </div>
       </div>
 
-      {/* Modal de confirmacion (reemplaza al window.confirm nativo) */}
       <ConfirmModal
         open={confirmOpen}
         title="Eliminar producto"

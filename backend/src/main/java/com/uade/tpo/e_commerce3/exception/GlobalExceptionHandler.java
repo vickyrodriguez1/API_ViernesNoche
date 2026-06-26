@@ -3,6 +3,7 @@ package com.uade.tpo.e_commerce3.exception;
 import com.uade.tpo.e_commerce3.dto.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,6 +45,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity<ErrorResponseDTO> handleInternalAuthenticationService(InternalAuthenticationServiceException ex) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, "AUTHENTICATION_ERROR", "Error de autenticacion");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                "DATA_INTEGRITY_VIOLATION",
+                "No se puede completar la operacion porque el recurso esta siendo utilizado por otros datos");
     }
 
     @ExceptionHandler(Exception.class)

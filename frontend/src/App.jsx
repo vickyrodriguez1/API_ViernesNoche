@@ -22,8 +22,13 @@ function App() {
   // para que sobreviva a recargas de pagina (persistencia simple del login).
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userRol, setUserRol] = useState(null)
+  // authReady = "¿ya termine de revisar si habia sesion guardada?". Arranca en false.
+  // Leer el localStorage es instantaneo pero ocurre DESPUES del primer render; sin
+  // esta bandera, por un instante isLoggedIn seria false y te mandaria al login aunque
+  // tuvieras sesion (parpadeo). Mostramos "Cargando..." hasta que authReady sea true.
   const [authReady, setAuthReady] = useState(false)
 
+  // Al montar la app: si hay token guardado, restauramos la sesion. Luego authReady=true.
   useEffect(() => {
     const token = localStorage.getItem('token')
     const rol = localStorage.getItem('userRol')

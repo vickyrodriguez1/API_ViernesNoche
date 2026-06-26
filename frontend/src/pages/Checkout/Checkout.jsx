@@ -5,8 +5,11 @@ import styles from './Checkout.module.css'; // Mantenemos tus estilos
 
 export default function Checkout() {
   const dispatch = useDispatch();
+  // Leemos el carrito del store global (Redux) y destructuramos lo que necesitamos.
+  // Al estar suscritos con useSelector, si el carrito cambia, esta pantalla se actualiza sola.
   const { items, total, loading, error, ultimoPedido } = useSelector((state) => state.cart);
 
+  // Al entrar, traemos el carrito del backend (fetchCart es un thunk asincronico).
   useEffect(() => {
     dispatch(limpiarMensajes());
     dispatch(fetchCart());
@@ -26,6 +29,8 @@ export default function Checkout() {
           {error && <div className={`${styles.alert} ${styles.alertError}`}>{error}</div>}
           {ultimoPedido && <div className={`${styles.alert} ${styles.alertSuccess}`}>¡Pedido #{ultimoPedido.id} confirmado!</div>}
 
+          {/* Renderizado condicional: si hay items mostramos la lista; si no, "carrito vacio".
+              El <>...</> es un Fragment: agrupa sin agregar un div extra al HTML. */}
           {items && items.length > 0 ? (
             <>
               <ul className={styles.list}>

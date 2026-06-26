@@ -9,6 +9,8 @@ import styles from './Home.module.css'
 // Al tocar una categoria, se filtra el listado de productos (estado selectedCategoria).
 export default function Home() {
   const [categorias, setCategorias] = useState([])
+  // "Lifting state up": la categoria elegida vive ACA (el padre) y se la pasamos por
+  // props a ProductList (el hijo que filtra). Asi el estado compartido esta arriba.
   const [selectedCategoria, setSelectedCategoria] = useState('') // '' = mostrar todas
 
   useEffect(() => {
@@ -27,10 +29,9 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.hero}>
-        <span className={styles.eyebrow}>Catálogo</span>
+      <header className={styles.hero}>     
         <h1 className={styles.title}>
-          Tu tienda <span className={styles.highlight}>E-Commerce</span>
+          Bienvenido a <span className={styles.highlight}>Defiant</span>
         </h1>
         <p className={styles.subtitle}>
           Explorá los productos por categoría y agregá lo que quieras a tu carrito.
@@ -62,7 +63,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Reutilizamos el componente de listado pasandole la categoria elegida */}
+      {/* Renderizamos el listado de productos pasandole la categoria elegida para
+          filtrar. ProductList es un componente aparte (responsabilidad unica: listar),
+          hoy se usa solo aca. El que SI se reutiliza es CardProductos (en este listado
+          y en la pagina de Favoritos). */}
       <ProductList categoria={selectedCategoria} />
     </div>
   )

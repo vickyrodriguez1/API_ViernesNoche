@@ -43,10 +43,12 @@ export default function LoginForm({ onLoginSuccess }) {
             // Si todo salió bien, recibimos el TokenResponseDTO con el JWT
             const data = await response.json();
             
-            // Guardamos el token en el almacenamiento local del navegador
+            // Guardamos el token en localStorage para mandarlo en cada pedido (Bearer)
+            // y para mantener la sesion aunque se recargue la pagina.
             localStorage.setItem('token', data.token);
 
-            // Decodificamos el JWT para extraer el email (está en el campo "sub")
+            // El JWT tiene 3 partes (header.payload.signature). El payload es legible:
+            // lo decodificamos con atob (Base64) para sacar el email, que viaja en "sub".
             const payload = JSON.parse(atob(data.token.split('.')[1]));
             const emailDelToken = payload.sub;
 

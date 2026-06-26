@@ -4,7 +4,12 @@ import { useDispatch } from 'react-redux'
 import { fetchCart } from '../store/slices/cartSlice'
 import Header from './Header'
 
-// Layout comun: pinta el Header arriba y debajo el contenido de cada ruta (Outlet).
+// AppLayout es un LAYOUT: la "plantilla" comun de las pantallas logueadas. Pinta el
+// Header (la barra de navegacion) arriba, y debajo el contenido de la ruta actual.
+//
+// isLoggedIn, userRol y onLogout son PROPS que recibe de App.jsx (el padre). AppLayout
+// las usa y/o las reenvia al Header (a esto, cuando un dato pasa por varios niveles,
+// se le dice "pasar props para abajo").
 export default function AppLayout({ isLoggedIn, userRol, onLogout }) {
   const dispatch = useDispatch()
 
@@ -19,6 +24,9 @@ export default function AppLayout({ isLoggedIn, userRol, onLogout }) {
   return (
     <div>
       <Header isLoggedIn={isLoggedIn} userRol={userRol} onLogout={onLogout} />
+      {/* <Outlet /> es el "hueco" de React Router: aca se inserta la pantalla de la
+          ruta hija actual (Home, Checkout, Favorites, etc.). Asi el Header queda
+          fijo arriba y abajo cambia solo el contenido segun la URL. */}
       <Outlet />
     </div>
   )

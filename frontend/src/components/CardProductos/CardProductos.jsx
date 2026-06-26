@@ -5,10 +5,13 @@ import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { addProductToCart } from '../../store/slices/cartSlice';
 import styles from './CardProductos.module.css';
 
+// Componente reutilizable: pinta UNA tarjeta de producto. Recibe el producto por
+// props y se usa tanto en el catalogo (ProductList) como en la pagina de Favoritos.
 const CardProductos = ({ product }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // para disparar acciones/thunks al store de Redux
   const navigate = useNavigate();
-  const favorites = useSelector((state) => state.favorites.items);
+  const favorites = useSelector((state) => state.favorites.items); // leemos del store global
+  // .some() devuelve true si ALGUN favorito tiene el id de este producto (ya es favorito)
   const isFavorite = favorites.some((item) => item?.id === product?.id);
 
   // El producto esta agotado cuando el backend nos manda stock 0.
@@ -51,7 +54,6 @@ const CardProductos = ({ product }) => {
             Sin imagen
           </div>
         )}
-        {/* CORREGIDO: Cambiado a plural para que detecte el array del backend */}
         {categoriaDestacada && (
           <span className={styles.badge}>{categoriaDestacada}</span>
         )}

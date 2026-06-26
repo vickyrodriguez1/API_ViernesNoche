@@ -1,4 +1,4 @@
-# E-Commerce API
+# Defiant
 
 Api REST desarrollada con Spring Boot para gestionar una tienda en línea con Productos, Usuarios y Pedidos.
 
@@ -217,7 +217,3 @@ spring.jpa.hibernate.ddl-auto=update
 - `enviado` - Pedido enviado
 - `entregado` - Pedido entregado
 - `cancelado` - Pedido cancelado
-
-## Licencia
-
-Este proyecto está bajo la licencia MIT.

@@ -183,6 +183,10 @@ const cartSlice = createSlice({
 
     builder
       // ---- GET (traer carrito) ----
+      // Solo fetchCart maneja `loading` (con su caso .pending) porque es la carga
+      // INICIAL del carrito, donde mostramos "Cargando carrito..." en el Checkout.
+      // Las demas acciones (agregar/quitar/vaciar/pagar) son rapidas y no bloquean la
+      // UI con un loading; igualmente, guardarCarrito (el fulfilled) deja loading=false.
       .addCase(fetchCart.pending, (state) => {
         state.loading = true
         state.error = null
