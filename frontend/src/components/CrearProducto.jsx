@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './CrearProducto.module.css';
 
 export default function CrearProducto() {
+    // Todo el estado del formulario es LOCAL (useState): se define aca, no viene de
+    // props ni del store. Cada campo es un componente controlado (value + onChange).
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [precio, setPrecio] = useState('');

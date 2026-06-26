@@ -7,7 +7,8 @@ import styles from './LoginForm.module.css';
 export default function LoginForm({ onLoginSuccess }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // 1. Estados para guardar los datos de entrada y errores
+    // Estado LOCAL del formulario (useState): estos datos los define ESTE componente,
+    // no vienen de props ni del store. value={x} + onChange = componentes controlados.
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');

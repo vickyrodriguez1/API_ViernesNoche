@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom'
 import CardProductos from '../../components/CardProductos'
 import styles from './Favorites.module.css'
 
+// Pagina de favoritos. No tiene estado propio: lee la lista del store global.
 export default function Favorites() {
+  // `favorites` sale del store de Redux (state.favorites.items). Lo escribe el corazon
+  // de CardProductos con dispatch(toggleFavorite(...)) y se persiste en localStorage.
   const favorites = useSelector((state) => state.favorites.items)
 
   return (

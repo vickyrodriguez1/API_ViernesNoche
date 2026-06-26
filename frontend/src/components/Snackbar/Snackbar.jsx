@@ -8,6 +8,9 @@ import styles from './Snackbar.module.css'
 // programa un temporizador para cerrarse a los 2,5 segundos.
 export default function Snackbar() {
   const dispatch = useDispatch()
+  // open/message/type NO son estado local: salen del store global (state.ui.snackbar),
+  // que escribe quien dispara showSnackbar (login, registro, ProductDetail, etc.).
+  // Por eso este unico componente, montado en la raiz, muestra los avisos de toda la app.
   const { open, message, type } = useSelector((state) => state.ui.snackbar)
 
   useEffect(() => {

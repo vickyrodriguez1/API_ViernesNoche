@@ -13,6 +13,9 @@ export default function ProductDetail({ isLoggedIn, userRol }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  // `product` arranca null y lo LLENA el fetch de mas abajo (GET /api/productos/:id).
+  // Es el dato central del archivo: se usa en handleAddToCart, handleUpdateStock,
+  // confirmarEliminar y en todo el render (product.nombre, product.precio, etc.).
   const [product, setProduct] = useState(null)
   const [categorias, setCategorias] = useState([]) // catalogo de categorias (para el PUT del admin)
   const [loading, setLoading] = useState(true)

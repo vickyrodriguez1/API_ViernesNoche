@@ -7,6 +7,13 @@ import styles from './CardProductos.module.css';
 
 // Componente reutilizable: pinta UNA tarjeta de producto. Recibe el producto por
 // props y se usa tanto en el catalogo (ProductList) como en la pagina de Favoritos.
+//
+// `product` es una PROP: NO la define este componente, se la pasa el padre.
+//   - Desde ProductList: <CardProductos product={product} /> (cada producto del .map
+//     sobre la lista que vino del backend con GET /api/productos).
+//   - Desde Favorites: <CardProductos product={product} /> (cada favorito guardado).
+// O sea: el dato nace en el backend -> el padre lo tiene -> nos lo pasa por props ->
+// y aca lo usamos en todo el archivo (product.nombre, product.precio, product.id, etc.).
 const CardProductos = ({ product }) => {
   const dispatch = useDispatch(); // para disparar acciones/thunks al store de Redux
   const navigate = useNavigate();

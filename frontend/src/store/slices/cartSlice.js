@@ -170,6 +170,9 @@ const cartSlice = createSlice({
   },
 
   // extraReducers maneja las acciones que generan los createAsyncThunk de arriba.
+  // `builder` es un "armador" que Redux Toolkit nos pasa: con builder.addCase(accion, fn)
+  // vamos registrando "cuando llegue ESTA accion, hace ESTO con el estado". Lo encadenamos
+  // (.addCase().addCase()...) para cubrir el pending/fulfilled/rejected de cada thunk.
   extraReducers: (builder) => {
     // Como fetch / add / remove / clear devuelven todos el carrito actualizado,
     // usamos esta MISMA función para guardar la respuesta en el estado y no repetir.
